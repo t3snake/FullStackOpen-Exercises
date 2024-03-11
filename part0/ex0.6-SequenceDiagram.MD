@@ -1,4 +1,6 @@
-'''mermaid
+## Mermaid Markdown for Sequence Diagram
+
+```mermaid
 sequenceDiagram
     participant browser
     participant server
@@ -9,4 +11,4 @@ sequenceDiagram
     deactivate server
 
     Note right of browser: Browser updates the page dynamically without reloading the page
-'''
+```
