@@ -16,7 +16,7 @@ const Button = ({onClick, name}) => {
   )
 }
 
-const Stats = ({name, value}) => {
+const StatisticLine = ({name, value}) => {
   return (
     <div>
       {name} {value}
@@ -45,12 +45,12 @@ const Statistics = ({good, bad, neutral}) => {
   return (
     <div>
       <Header name={"Statistics"} />
-      <Stats name={"Good"} value={good} />
-      <Stats name={"Neutral"} value={neutral} />
-      <Stats name={"Bad"} value={bad} />
-      <Stats name={"All"} value={good + bad + neutral} />
-      <Stats name={"Average"} value={calcAvg()} />
-      <Stats name={"Positive"} value={calcPositive()} />
+      <StatisticLine name="Good" value={good} />
+      <StatisticLine name="Neutral" value={neutral} />
+      <StatisticLine name="Bad" value={bad} />
+      <StatisticLine name="All" value={good + bad + neutral} />
+      <StatisticLine name="Average" value={calcAvg()} />
+      <StatisticLine name="Positive" value={calcPositive()} />
     </div>
   )
 }
