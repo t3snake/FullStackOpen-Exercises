@@ -13,15 +13,27 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(Array(8).fill(0))
 
   const randomizeSelection = () => {
     setSelected(Math.round(Math.random()*7))
+  }
+
+  const voteSelection = () => {
+    let newVote = [...votes]
+    newVote[selected] += 1
+    setVotes(newVote)
   }
 
   return (
     <div>
       {anecdotes[selected]}
       <br/>
+      has {votes[selected]} votes
+      <br/>
+      <button onClick={voteSelection}>
+        vote
+      </button>
       <button onClick={randomizeSelection}>
         next anecdote
       </button>
