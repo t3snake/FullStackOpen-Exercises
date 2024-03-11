@@ -25,6 +25,15 @@ const Stats = ({name, value}) => {
 }
 
 const Statistics = ({good, bad, neutral}) => {
+  if (good === 0 && bad === 0 && neutral === 0 ){
+    return (
+      <div>
+        <Header name={"Statistics"} />
+        No feedback given
+      </div>
+    )
+  }
+
   const calcAvg = () => {
     return (good - bad) / (good + bad + neutral)
   }
