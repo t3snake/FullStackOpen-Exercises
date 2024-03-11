@@ -42,6 +42,14 @@ const App = () => {
     setBad(bad + 1)
   }
 
+  const calcAvg = () => {
+    return (good - bad) / (good + bad + neutral)
+  }
+
+  const calcPositive = () => {
+    return ( (good * 100) / (good + bad + neutral))
+  }
+
   return (
     <div>
       <Header name={"Give Feedback"} />
@@ -52,6 +60,9 @@ const App = () => {
       <Stats name={"Good"} value={good} />
       <Stats name={"Neutral"} value={neutral} />
       <Stats name={"Bad"} value={bad} />
+      <Stats name={"All"} value={good + bad + neutral} />
+      <Stats name={"Average"} value={calcAvg()} />
+      <Stats name={"Positive"} value={calcPositive()} />
     </div>
   )
 }
