@@ -1,4 +1,6 @@
-'''mermaid
+## Mermaid Markdown for Sequence Diagram
+
+```mermaid
 sequenceDiagram
     participant browser
     participant server
