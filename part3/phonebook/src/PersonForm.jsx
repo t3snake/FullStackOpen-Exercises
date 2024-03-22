@@ -8,9 +8,19 @@ const PersonForm = ({persons, setPersons}) => {
 
   const addEntry = (event) => {
       event.preventDefault()
-      if (persons.filter(p=>p.name === newName).length > 0){
-        let message = `${newName} is already added to phonebook`
-        alert(message)
+      const existingUser = persons.filter(p=>p.name === newName)
+      if (existingUser.length > 0){
+        let message = `${newName} is already added to phonebook, replace old number with a new one?`
+        if( window.confirm(message) ) {
+          const updatedUser = { ...existingUser[0], number: newNumber}
+          PhonebookService
+            .updateUser(updatedUser.id, updatedUser)
+            .then(response => {
+              const newPersons = persons.map(person => person.id === updatedUser.id ? response.data: person)
+              console.log(newPersons)
+              setPersons(newPersons)
+            })
+        }
       }
       else if (persons.filter(p=>p.number === newNumber).length > 0) {
         let message = `${newNumber} is already added to phonebook`
