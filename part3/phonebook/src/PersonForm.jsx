@@ -17,7 +17,7 @@ const PersonForm = ({persons, setPersons}) => {
         alert(message)
       }
       else{
-        const newUser = { name: newName, number: newNumber, id: persons.length + 1 }
+        const newUser = { name: newName, number: newNumber, id: `${persons.length + 1}` }
         PhonebookService
           .createUser(newUser)
           .then((response) => {
