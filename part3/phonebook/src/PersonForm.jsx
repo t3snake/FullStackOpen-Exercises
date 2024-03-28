@@ -1,7 +1,7 @@
 import { useState } from "react"
 import PhonebookService from "./service/PhonebookService"
 
-const PersonForm = ({persons, setPersons}) => {
+const PersonForm = ({persons, setPersons, setMessage, setIsError}) => {
   const [newName, setNewName] = useState('')
 
   const [newNumber, setNewNumber] = useState('')
@@ -17,8 +17,13 @@ const PersonForm = ({persons, setPersons}) => {
             .updateUser(updatedUser.id, updatedUser)
             .then(response => {
               const newPersons = persons.map(person => person.id === updatedUser.id ? response.data: person)
-              console.log(newPersons)
               setPersons(newPersons)
+              setMessage(`Updated ${newName}`)
+              setIsError(false)
+
+              setTimeout(() => {
+                setMessage(null)
+              }, 3000)
             })
         }
       }
@@ -33,6 +38,12 @@ const PersonForm = ({persons, setPersons}) => {
           .then((response) => {
             const newPersons = persons.concat(response.data)
             setPersons(newPersons)
+            setMessage(`Added ${newName}`)
+            setIsError(false)
+
+            setTimeout(() => {
+              setMessage(null)
+            }, 3000)
           })
       }
       setNewName('')
