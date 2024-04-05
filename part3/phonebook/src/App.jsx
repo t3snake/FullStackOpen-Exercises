@@ -26,7 +26,7 @@ const App = () => {
       <h3>Add a new</h3>
       <PersonForm persons={persons} setPersons={setPersons} setMessage={setMessage} setIsError={setIsError} />
       <h3>Numbers</h3>
-      <Persons persons={persons} setPersons={setPersons} filter={filter} />
+      <Persons persons={persons} setPersons={setPersons} filter={filter} setMessage={setMessage} setIsError={setIsError} />
       <br />
       <Notification message={message} isError={isError} />
     </div>

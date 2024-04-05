@@ -25,6 +25,16 @@ const PersonForm = ({persons, setPersons, setMessage, setIsError}) => {
                 setMessage(null)
               }, 3000)
             })
+            .catch(error => {
+              setIsError(true)
+              setMessage(`User ${updatedUser.name} already deleted from the server`)
+              const newPersons = persons.filter(person => person.id !== updatedUser.id)
+              setPersons(newPersons)
+  
+              setTimeout(() => {
+                setMessage(null)
+              }, 3000)
+            })
         }
       }
       else if (persons.filter(p=>p.number === newNumber).length > 0) {
@@ -45,6 +55,7 @@ const PersonForm = ({persons, setPersons, setMessage, setIsError}) => {
               setMessage(null)
             }, 3000)
           })
+          
       }
       setNewName('')
       setNewNumber('')
