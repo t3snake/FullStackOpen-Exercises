@@ -1,3 +1,5 @@
+import CountryListItem from "./CountryListItem"
+import CountryView from "./CountryView"
 
 const CountryList = ({filter, countries}) => {
     if (countries.length === 0) {
@@ -19,8 +21,8 @@ const CountryList = ({filter, countries}) => {
             <>
                 {filteredCountries.map(country => {
                     return (
-                        <div key={country.ccn3}>
-                            {country.name.common}
+                        <div key={country.ccn3} >
+                            <CountryListItem country={country} />
                         </div>
                     )
                 })}
@@ -30,25 +32,10 @@ const CountryList = ({filter, countries}) => {
 
     if (filteredCountries.length == 1) {
         let country = filteredCountries[0]
-        console.log(country.languages)
         return (
-            <div>
-                <h1>{country.name.common}</h1>
-                Capital: {country.capital[0]} <br />
-                Area: {country.area}
-
-                <h2>Languages</h2>
-                <ul>
-                    {Object.keys(country.languages).map(key => {
-                        return (
-                            <li key={key}>
-                                {country.languages[key]}
-                            </li>
-                        )
-                    })}
-                </ul>
-                <img src={country.flags.svg} alt="Flag" width="256" />
-            </div>
+            <>
+                <CountryView country={country} isHidden={false} />
+            </>
         )
     }
 }
