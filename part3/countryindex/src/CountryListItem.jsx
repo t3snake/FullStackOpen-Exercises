@@ -4,6 +4,7 @@ import CountryView from "./CountryView"
 const CountryListItem = ({country}) => {
     const [isViewHidden, setIsViewHidden] = useState(true)
     const [buttonText, setButtonText] = useState("show")
+    
     const toggleView = () => {
         if (isViewHidden) {
             setButtonText("hide")

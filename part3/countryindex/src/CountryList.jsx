@@ -2,7 +2,7 @@ import CountryListItem from "./CountryListItem"
 import CountryView from "./CountryView"
 
 const CountryList = ({filter, countries}) => {
-    if (countries.length === 0) {
+    if (countries.length === 0 || !filter) {
         return null
     }
 

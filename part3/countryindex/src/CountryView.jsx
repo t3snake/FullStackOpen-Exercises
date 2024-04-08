@@ -1,7 +1,10 @@
+import WeatherView from "./WeatherView"
+
 const CountryView = ({country,isHidden}) => {
     if (isHidden) {
         return null
     }
+
     return (
         <>
             <h1>{country.name.common}</h1>
@@ -19,6 +22,8 @@ const CountryView = ({country,isHidden}) => {
                 })}
             </ul>
             <img src={country.flags.svg} alt="Flag" width="256" />
+            <h2>Weather for {country.capital[0]}</h2>
+            <WeatherView lat={country.latlng[0]} lon={country.latlng[1]} />
         </>
     )
 }
