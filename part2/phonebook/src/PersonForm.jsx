@@ -8,15 +8,15 @@ const PersonForm = ({persons, setPersons, setMessage, setIsError}) => {
 
   const addEntry = (event) => {
       event.preventDefault()
-      const existingUser = persons.filter(p=>p.name === newName)
-      if (existingUser.length > 0){
+      const existingUser = persons.find(p=>p.name === newName)
+      if (existingUser){
         let message = `${newName} is already added to phonebook, replace old number with a new one?`
         if( window.confirm(message) ) {
-          const updatedUser = { ...existingUser[0], number: newNumber}
+          const updatedUser = { ...existingUser, number: newNumber}
           PhonebookService
             .updateUser(updatedUser.id, updatedUser)
             .then(response => {
-              const newPersons = persons.map(person => person.id === updatedUser.id ? response.data: person)
+              const newPersons = persons.map(person => person.id === updatedUser.id ? response.data : person)
               setPersons(newPersons)
               setMessage(`Updated ${newName}`)
               setIsError(false)
