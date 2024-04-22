@@ -1,7 +1,12 @@
 import PhonebookService from './service/PhonebookService'
 
 const Persons = ({persons, setPersons, filter, setMessage, setIsError}) => {
-    
+    const startMessageTimer = () => {
+        setTimeout(() => {
+          setMessage(null)
+        }, 3000)
+    }
+
     const deleteUserHandler= (user) => {
         if( window.confirm(`Delete ${user.name} ?`) ) {
             PhonebookService
@@ -9,6 +14,11 @@ const Persons = ({persons, setPersons, filter, setMessage, setIsError}) => {
                 .then(response => {
                     const newPersons = persons.filter(person => person.id !== user.id)
                     setPersons(newPersons)
+
+                    setIsError(false)
+                    setMessage(`User ${user.name} successfully deleted.`)
+
+                    startMessageTimer()
                 })
                 .catch(error => {
                     setIsError(true)
@@ -16,9 +26,7 @@ const Persons = ({persons, setPersons, filter, setMessage, setIsError}) => {
                     const newPersons = persons.filter(person => person.id !== user.id)
                     setPersons(newPersons)
 
-                    setTimeout(() => {
-                        setMessage(null)
-                      }, 3000)
+                    startMessageTimer()
                 })
         }
     }

@@ -6,13 +6,21 @@ const PersonForm = ({persons, setPersons, setMessage, setIsError}) => {
 
   const [newNumber, setNewNumber] = useState('')
 
+  const startMessageTimer = () => {
+    setTimeout(() => {
+      setMessage(null)
+    }, 3000)
+  }
+
   const addEntry = (event) => {
       event.preventDefault()
       const existingUser = persons.find(p=>p.name === newName)
       if (existingUser){
         let message = `${newName} is already added to phonebook, replace old number with a new one?`
+        
         if( window.confirm(message) ) {
           const updatedUser = { ...existingUser, number: newNumber}
+          
           PhonebookService
             .updateUser(updatedUser.id, updatedUser)
             .then(response => {
@@ -21,19 +29,19 @@ const PersonForm = ({persons, setPersons, setMessage, setIsError}) => {
               setMessage(`Updated ${newName}`)
               setIsError(false)
 
-              setTimeout(() => {
-                setMessage(null)
-              }, 3000)
+              startMessageTimer()
             })
             .catch(error => {
               setIsError(true)
-              setMessage(`User ${updatedUser.name} already deleted from the server`)
-              const newPersons = persons.filter(person => person.id !== updatedUser.id)
-              setPersons(newPersons)
+              if (error.response.status === '404'){
+                setMessage(`User ${updatedUser.name} already deleted from the server`)
+                const newPersons = persons.filter(person => person.id !== updatedUser.id)
+                setPersons(newPersons)
+              } else {
+                setMessage(error.response.data.error)
+              }
   
-              setTimeout(() => {
-                setMessage(null)
-              }, 3000)
+              startMessageTimer()
             })
         }
       }
@@ -48,12 +56,16 @@ const PersonForm = ({persons, setPersons, setMessage, setIsError}) => {
           .then((response) => {
             const newPersons = persons.concat(response.data)
             setPersons(newPersons)
-            setMessage(`Added ${newName}`)
             setIsError(false)
+            setMessage(`Added ${newName}`)
+            
+            startMessageTimer()
+          })
+          .catch(error => {
+            setIsError(true)
+            setMessage(error.response.data.error)
 
-            setTimeout(() => {
-              setMessage(null)
-            }, 3000)
+            startMessageTimer()
           })
           
       }
