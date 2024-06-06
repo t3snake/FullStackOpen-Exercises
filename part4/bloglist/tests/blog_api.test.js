@@ -64,6 +64,30 @@ test('check if the parameter id exists in response object', async () => {
     assert("id" in object)
 })
 
+test('check if post works with a valid entry', async () => {
+    const blog = {
+        title: "DEF",
+        author: "Author of DEF",
+        url: "def.com",
+        likes: 15,
+    }
+
+    await blog_api
+        .post('/api/blogs')
+        .send(blog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+    let response = await blog_api.get('/api/blogs')
+
+    let content = response._body.map(e => e.title)
+
+    assert.strictEqual(content.length, initialBlogs.length + 1)
+
+    assert(content.includes('DEF'))
+
+})
+
 after( async () => {
     await mongoose.connection.close()
 })
