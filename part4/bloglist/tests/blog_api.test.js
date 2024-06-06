@@ -1,4 +1,4 @@
-const { test, after, beforeEach } = require('node:test')
+const { test, after, beforeEach, describe } = require('node:test')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const blog_app = require('../app')
@@ -32,101 +32,132 @@ beforeEach(async () => {
 
 })
 
-test('check get uri returns json', async () => {
-    await blog_api
-            .get('/api/blogs')
-            .expect(200)
+describe('Test GET for blogs api', () => {
+    test('check get uri returns json', async () => {
+        await blog_api
+                .get('/api/blogs')
+                .expect(200)
+                .expect('Content-Type', /application\/json/)
+    })
+    
+    test('check get uri returns 2 blogs', async () => {
+        let response = await blog_api.get('/api/blogs')
+    
+        const content = response._body
+    
+        assert.strictEqual(content.length, initialBlogs.length)
+    })
+    
+    test('check get uri returns the correct authors', async () => {
+        let response = await blog_api.get('/api/blogs')
+    
+        const content = response._body.map(body => body.author)
+    
+        assert(content.includes('Author of ABC'))
+        assert(content.includes('Author of BCD'))
+    })
+    
+    test('check if the parameter id exists in response object', async () => {
+        let response = await blog_api.get('/api/blogs')
+    
+        const object = response._body[0]
+    
+        assert("id" in object)
+    })
+})
+
+
+describe('Test POST for blogs api', () => {
+
+    test('check if post works with a valid entry', async () => {
+        const blog = {
+            title: "DEF",
+            author: "Author of DEF",
+            url: "def.com",
+            likes: 15,
+        }
+    
+        await blog_api
+            .post('/api/blogs')
+            .send(blog)
+            .expect(201)
             .expect('Content-Type', /application\/json/)
+    
+        let response = await blog_api.get('/api/blogs')
+    
+        let content = response._body.map(e => e.title)
+    
+        assert.strictEqual(content.length, initialBlogs.length + 1)
+    
+        assert(content.includes('DEF'))
+    
+    })
+    
+    test('check post with missing likes parameter', async () => {
+        const blog = {
+            title: "DEF",
+            author: "Author of DEF",
+            url: "def.com",
+        }
+    
+        let response = await blog_api.post('/api/blogs').send(blog)
+    
+        assert.strictEqual(response._body.likes, 0)
+    })
+    
+    test('check post with missing title parameter', async () => {
+        const blog = {
+            author: "Author of HGR",
+            url: "hgr.com",
+            likes: 50
+        }
+    
+        await blog_api
+            .post('/api/blogs')
+            .send(blog)
+            .expect(400)
+    
+    })
+    
+    test('check post with missing url parameter', async () => {
+        const blog = {
+            title: "GHY",
+            author: "Author of GHY",
+            likes: 50
+        }
+
+        await blog_api
+            .post('/api/blogs')
+            .send(blog)
+            .expect(400)
+    })
 })
 
-test('check get uri returns 2 blogs', async () => {
-    let response = await blog_api.get('/api/blogs')
+describe('Test DELETE for blogs api', () => {
+    test('check delete', async () => {
+        let response = await blog_api.get('/api/blogs')
+    
+        const content = response._body.map(body => body.id)
+    
+        await blog_api
+            .delete(`/api/blogs/${content[0]}`)
+            .expect(204)
+        
+        response = await blog_api.get('/api/blogs')
 
-    const content = response._body
+        assert.strictEqual(response._body.length, initialBlogs.length-1)
 
-    assert.strictEqual(content.length, initialBlogs.length)
+        await blog_api
+            .delete(`/api/blogs/${content[1]}`)
+            .expect(204)
+        
+        response = await blog_api.get('/api/blogs')
+
+        assert.strictEqual(response._body.length, initialBlogs.length-2)
+
+    })
 })
 
-test('check get uri returns the correct authors', async () => {
-    let response = await blog_api.get('/api/blogs')
-
-    const content = response._body.map(body => body.author)
-
-    assert(content.includes('Author of ABC'))
-    assert(content.includes('Author of BCD'))
-})
-
-test('check if the parameter id exists in response object', async () => {
-    let response = await blog_api.get('/api/blogs')
-
-    const object = response._body[0]
-
-    assert("id" in object)
-})
-
-test('check if post works with a valid entry', async () => {
-    const blog = {
-        title: "DEF",
-        author: "Author of DEF",
-        url: "def.com",
-        likes: 15,
-    }
-
-    await blog_api
-        .post('/api/blogs')
-        .send(blog)
-        .expect(201)
-        .expect('Content-Type', /application\/json/)
-
-    let response = await blog_api.get('/api/blogs')
-
-    let content = response._body.map(e => e.title)
-
-    assert.strictEqual(content.length, initialBlogs.length + 1)
-
-    assert(content.includes('DEF'))
-
-})
-
-test('check post with missing likes parameter', async () => {
-    const blog = {
-        title: "DEF",
-        author: "Author of DEF",
-        url: "def.com",
-    }
-
-    let response = await blog_api.post('/api/blogs').send(blog)
-
-    assert.strictEqual(response._body.likes, 0)
-})
-
-test('check post with missing title parameter', async () => {
-    const blog = {
-        author: "Author of HGR",
-        url: "hgr.com",
-        likes: 50
-    }
-
-    await blog_api
-        .post('/api/blogs')
-        .send(blog)
-        .expect(400)
-
-})
-
-test('check post with missing url parameter', async () => {
-    const blog = {
-        title: "GHY",
-        author: "Author of GHY",
-        likes: 50
-    }
-
-    await blog_api
-        .post('/api/blogs')
-        .send(blog)
-        .expect(400)
-
-})
 
 after( async () => {
     await mongoose.connection.close()
