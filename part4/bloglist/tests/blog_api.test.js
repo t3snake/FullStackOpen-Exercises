@@ -88,6 +88,18 @@ test('check if post works with a valid entry', async () => {
 
 })
 
+test('check post with missing likes parameter', async () => {
+    const blog = {
+        title: "DEF",
+        author: "Author of DEF",
+        url: "def.com",
+    }
+
+    let response = await blog_api.post('/api/blogs')
+
+    assert.strictEqual(response._body.likes, 0)
+})
+
 after( async () => {
     await mongoose.connection.close()
 })
