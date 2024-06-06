@@ -95,7 +95,7 @@ test('check post with missing likes parameter', async () => {
         url: "def.com",
     }
 
-    let response = await blog_api.post('/api/blogs')
+    let response = await blog_api.post('/api/blogs').send(blog)
 
     assert.strictEqual(response._body.likes, 0)
 })
