@@ -158,6 +158,45 @@ describe('Test DELETE for blogs api', () => {
     })
 })
 
+describe('Test PUT for blogs api', () => {
+    test('check put with valid id', async () => {
+        let response = await blog_api.get('/api/blogs')
+    
+        const abcBlog = response._body.filter(body => body.title === 'ABC')
+
+        assert.strictEqual(abcBlog[0].likes, 51)
+
+        const object = {
+            title: "ABC",
+            author: "Author of ABC",
+            url: "abc.com",
+            likes: 57,
+        }
+    
+        response = await blog_api
+            .put(`/api/blogs/${abcBlog[0].id}`)
+            .send(object)
+            .expect(200)
+
+        assert.strictEqual(response._body.likes, 57)
+    })
+
+    test('check put with non existing id', async () => {
+
+        const object = {
+            title: "ABC",
+            author: "Author of ABC",
+            url: "abc.com",
+            likes: 57,
+        }
+    
+        response = await blog_api
+            .put(`/api/blogs/1`)
+            .send(object)
+            .expect(404)
+    })
+})
+
 
 after( async () => {
     await mongoose.connection.close()

@@ -28,4 +28,26 @@ blogRouter.delete('/:id', async (request, response) => {
     }
 })
 
+blogRouter.put('/:id', async (request, response) => {
+    const id = request.params.id
+
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+        response.status(404).end()
+        return
+    }
+
+    const blog = request.body
+
+    try{
+        let result = await Blog.findByIdAndUpdate(id, blog, {new: true})
+        if (result) {
+            response.status(200).json(result)
+        } else {
+            response.status(404).end()
+        }
+    } catch (error) {
+        response.status(400).send({error: error.message})
+    }
+})
+
 module.exports = blogRouter
