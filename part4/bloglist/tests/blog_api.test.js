@@ -100,6 +100,34 @@ test('check post with missing likes parameter', async () => {
     assert.strictEqual(response._body.likes, 0)
 })
 
+test('check post with missing title parameter', async () => {
+    const blog = {
+        author: "Author of HGR",
+        url: "hgr.com",
+        likes: 50
+    }
+
+    await blog_api
+        .post('/api/blogs')
+        .send(blog)
+        .expect(400)
+
+})
+
+test('check post with missing url parameter', async () => {
+    const blog = {
+        title: "GHY",
+        author: "Author of GHY",
+        likes: 50
+    }
+
+    await blog_api
+        .post('/api/blogs')
+        .send(blog)
+        .expect(400)
+
+})
+
 after( async () => {
     await mongoose.connection.close()
 })
