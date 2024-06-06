@@ -56,6 +56,14 @@ test('check get uri returns the correct authors', async () => {
     assert(content.includes('Author of BCD'))
 })
 
+test('check if the parameter id exists in response object', async () => {
+    let response = await blog_api.get('/api/blogs')
+
+    const object = response._body[0]
+
+    assert("id" in object)
+})
+
 after( async () => {
     await mongoose.connection.close()
 })
