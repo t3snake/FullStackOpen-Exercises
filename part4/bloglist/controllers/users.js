@@ -12,10 +12,20 @@ userRouter.get('/', async (request, response) => {
 userRouter.post('/', async (request, response) => {
     const { username, name, password} = request.body
 
-    console.log({username, name, password})
-
     if( !username || !name || !password ) {
-        response.status(404).send({error: 'Malformed request body. Check if username, name and password are non empty'})
+        response
+            .status(400)
+            .send({error: 'Malformed request body. Check if username, name and password are non empty'})
+        return
+    } else if( username.length < 3) {
+        response
+            .status(400)
+            .send({error: 'Use a username with more than 3 characters'})
+        return
+    } else if( username.length < 3) {
+        response
+            .status(400)
+            .send({error: 'Use a password with more than 3 characters'})
         return
     }
 

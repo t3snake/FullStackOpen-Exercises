@@ -5,8 +5,7 @@ const blog_app = require('../app')
 const Blog = require('../models/blog')
 const supertest = require('supertest')
 
-
-blog_api = supertest(blog_app)
+const blog_api = supertest(blog_app)
 
 const initialBlogs = [
     {
