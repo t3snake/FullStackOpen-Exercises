@@ -5,15 +5,6 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 const config = require('../utils/config')
 
-const getTokenFrom = request => {
-    const auth = request.get('authorization')
-
-    if(auth && auth.startsWith('Bearer '))
-        return auth.replace('Bearer ', '')
-
-    return null
-}
-
 blogRouter.get('/', async (request, response) => {
     const blogs = await Blog
         .find({})
@@ -57,8 +48,18 @@ blogRouter.post('/', async (request, response) => {
 blogRouter.delete('/:id', async (request, response) => {
     const id = request.params.id
 
+    const decodedToken = jwt.verify(request.token, config.SECRET)
+    
+    if( !decodedToken ) {
+        return response.status(401).json({error: 'Invalid token'})
+    }
+
+    const user = await User.findById(decodedToken.id)
+
     try{
         await Blog.findByIdAndDelete(id)
+        user.blogs = user.blogs.filter(user => user._id !== id)
+        await user.save()
         response.status(204).end()
     } catch (error) {
         response.status(404).end()
