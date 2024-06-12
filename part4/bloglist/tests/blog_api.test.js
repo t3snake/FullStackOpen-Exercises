@@ -3,6 +3,7 @@ const assert = require('node:assert')
 const mongoose = require('mongoose')
 const blog_app = require('../app')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const supertest = require('supertest')
 
 const blog_api = supertest(blog_app)
@@ -22,11 +23,35 @@ const initialBlogs = [
     }
 ]
 
+const initialUser = {
+    username: "def23",
+    name: "Def",
+    password: "password@def"
+}
+
+let token = ''
+
 beforeEach(async () => {
+    await User.deleteMany({})
+    const userResponse = await blog_api
+        .post('/api/users')
+        .send(initialUser)
+
+    let tokenResponse = await blog_api
+        .post('/api/login')
+        .send({
+            username: initialUser.username,
+            password: initialUser.password
+        })
+    
+    token = tokenResponse.body.token
+
     await Blog.deleteMany({})
     let blog = new Blog(initialBlogs[0])
+    blog.user = userResponse.body.id
     await blog.save()
     blog = new Blog(initialBlogs[1])
+    blog.user = userResponse.body.id
     await blog.save()
 
 })
@@ -68,7 +93,7 @@ describe('Test GET for blogs api', () => {
 
 describe('Test POST for blogs api', () => {
 
-    test('check if post works with a valid entry', async () => {
+    test('check if post works with a valid entry with auth', async () => {
         const blog = {
             title: "DEF",
             author: "Author of DEF",
@@ -79,6 +104,7 @@ describe('Test POST for blogs api', () => {
         await blog_api
             .post('/api/blogs')
             .send(blog)
+            .set('Authorization', `Bearer ${token}`)
             .expect(201)
             .expect('Content-Type', /application\/json/)
     
@@ -91,6 +117,20 @@ describe('Test POST for blogs api', () => {
         assert(content.includes('DEF'))
     
     })
+
+    test('check post with invalid auth', async () => {
+        const blog = {
+            title: "DEF",
+            author: "Author of DEF",
+            url: "def.com",
+            likes: 15,
+        }
+    
+        await blog_api
+            .post('/api/blogs')
+            .send(blog)
+            .expect(401)
+    })
     
     test('check post with missing likes parameter', async () => {
         const blog = {
@@ -99,8 +139,11 @@ describe('Test POST for blogs api', () => {
             url: "def.com",
         }
     
-        let response = await blog_api.post('/api/blogs').send(blog)
-    
+        let response = await blog_api
+            .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
+            .send(blog)
+            
         assert.strictEqual(response._body.likes, 0)
     })
     
@@ -113,6 +156,7 @@ describe('Test POST for blogs api', () => {
     
         await blog_api
             .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
             .send(blog)
             .expect(400)
     
@@ -127,6 +171,7 @@ describe('Test POST for blogs api', () => {
 
         await blog_api
             .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
             .send(blog)
             .expect(400)
     })
@@ -140,6 +185,7 @@ describe('Test DELETE for blogs api', () => {
     
         await blog_api
             .delete(`/api/blogs/${content[0]}`)
+            .set('Authorization', `Bearer ${token}`)
             .expect(204)
         
         response = await blog_api.get('/api/blogs')
@@ -148,12 +194,24 @@ describe('Test DELETE for blogs api', () => {
 
         await blog_api
             .delete(`/api/blogs/${content[1]}`)
+            .set('Authorization', `Bearer ${token}`)
             .expect(204)
         
         response = await blog_api.get('/api/blogs')
 
         assert.strictEqual(response._body.length, initialBlogs.length-2)
 
+    })
+
+    test('check delete with invalid auth', async () => {
+        let response = await blog_api.get('/api/blogs')
+    
+        const content = response._body.map(body => body.id)
+    
+        await blog_api
+            .delete(`/api/blogs/${content[0]}`)
+            .set('Authorization', `Bearer abc@1`)
+            .expect(401)
     })
 })
 
