@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const config = require('../utils/config')
+const middleware = require('../utils/middleware')
 
 blogRouter.get('/', async (request, response) => {
     const blogs = await Blog
@@ -12,16 +13,9 @@ blogRouter.get('/', async (request, response) => {
     response.json(blogs)
 })
   
-blogRouter.post('/', async (request, response) => {
+blogRouter.post('/', middleware.userExtractor, async (request, response) => {
     const body = request.body
-    
-    const decodedToken = jwt.verify(request.token, config.SECRET)
-    
-    if( !decodedToken ) {
-        return response.status(401).json({error: 'Invalid token'})
-    }
-
-    const user = await User.findById(decodedToken.id)
+    const user = request.user 
 
     const newBlog = {
         title: body.title,
@@ -45,16 +39,10 @@ blogRouter.post('/', async (request, response) => {
     }
 })
 
-blogRouter.delete('/:id', async (request, response) => {
+blogRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
     const id = request.params.id
 
-    const decodedToken = jwt.verify(request.token, config.SECRET)
-    
-    if( !decodedToken ) {
-        return response.status(401).json({error: 'Invalid token'})
-    }
-
-    const user = await User.findById(decodedToken.id)
+    const user = request.user
 
     try{
         await Blog.findByIdAndDelete(id)
