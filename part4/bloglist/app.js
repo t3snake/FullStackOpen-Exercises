@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+require('express-async-errors')
 const cors = require('cors')
 const mongoose = require('mongoose')
 
@@ -22,6 +23,7 @@ mongoose.connect(config.MONGODB_URI)
 
 app.use(cors())
 app.use(express.json())
+
 if (process.env.NODE_ENV !== 'test')
     app.use(middleware.requestLogger)
 

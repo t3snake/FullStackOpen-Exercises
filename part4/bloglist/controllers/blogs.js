@@ -1,6 +1,18 @@
 const blogRouter = require('express').Router()
+const jwt = require('jsonwebtoken')
+
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const config = require('../utils/config')
+
+const getTokenFrom = request => {
+    const auth = request.get('authorization')
+
+    if(auth && auth.startsWith('Bearer '))
+        return auth.replace('Bearer ', '')
+
+    return null
+}
 
 blogRouter.get('/', async (request, response) => {
     const blogs = await Blog
@@ -10,14 +22,21 @@ blogRouter.get('/', async (request, response) => {
 })
   
 blogRouter.post('/', async (request, response) => {
-    const users = await User.find({})
-    const user = users[0]
+    const body = request.body
+    
+    const decodedToken = jwt.verify(getTokenFrom(request), config.SECRET)
+    
+    if( !decodedToken ) {
+        return response.status(401).json({error: 'Invalid token'})
+    }
+
+    const user = await User.findById(decodedToken.id)
 
     const newBlog = {
-        title: request.body.title,
-        author: request.body.author,
-        url: request.body.url,
-        likes: request.body.likes || 0,
+        title: body.title,
+        author: body.author,
+        url: body.url,
+        likes: body.likes || 0,
         user: user.id
     }
 
@@ -25,8 +44,6 @@ blogRouter.post('/', async (request, response) => {
 
     try {
         const result = await blog.save()
-
-        console.log(result)
 
         user.blogs = user.blogs.concat(result._id)
         await user.save()
@@ -51,6 +68,7 @@ blogRouter.delete('/:id', async (request, response) => {
 blogRouter.put('/:id', async (request, response) => {
     const id = request.params.id
 
+    // mongo _id format check
     if (!id.match(/^[0-9a-fA-F]{24}$/)) {
         response.status(404).end()
         return
