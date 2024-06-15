@@ -5,6 +5,14 @@ import LoginPage from './components/LoginPage'
 const App = () => {
     const [user, setUser] = useState(null)
 
+    useEffect(() => {    
+        const loggedUserJSON = window.localStorage.getItem('loggedInBlogListUser')    
+        if (loggedUserJSON) {      
+            const user = JSON.parse(loggedUserJSON)      
+            setUser(user)
+        }  
+    }, [])
+
     if (user === null) {
         return (
             <LoginPage setUser={setUser} />
@@ -12,7 +20,7 @@ const App = () => {
     }
 
     return (
-        <BlogPage user={user} />
+        <BlogPage user={user} setUser={setUser} />
     )
   
 }
