@@ -7,14 +7,14 @@ const App = () => {
     const [message, setMessage] = useState('')
     const [messageType, setMessageType] = useState('error')
 
-    const state = { user, setUser, message, setMessage, messageType, setMessageType}
+    const state = { user, setUser, message, setMessage, messageType, setMessageType }
 
-    useEffect(() => {    
-        const loggedUserJSON = window.localStorage.getItem('loggedInBlogListUser')    
-        if (loggedUserJSON) {      
-            const user = JSON.parse(loggedUserJSON)      
+    useEffect(() => {
+        const loggedUserJSON = window.localStorage.getItem('loggedInBlogListUser')
+        if (loggedUserJSON) {
+            const user = JSON.parse(loggedUserJSON)
             setUser(user)
-        }  
+        }
     }, [])
 
     if (user === null) {
@@ -26,7 +26,7 @@ const App = () => {
     return (
         <BlogPage {...state} />
     )
-  
+
 }
 
 export default App

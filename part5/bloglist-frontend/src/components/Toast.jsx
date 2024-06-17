@@ -1,6 +1,6 @@
-import { useEffect } from "react"
+import { useEffect } from 'react'
 
-const Toast = ({message, setMessage, messageType}) => {
+const Toast = ({ message, setMessage, messageType }) => {
     const errorStyle = {
         color: '#db0000',
         backgroundColor: '#fff2f2',
@@ -28,7 +28,7 @@ const Toast = ({message, setMessage, messageType}) => {
 
     useEffect( () => {
         setTimeout(() => setMessage(''), 3000)
-    }, [message])
+    }, [message, setMessage])
 
     return(
         (message !== '') && <div style={style}> {message} </div>

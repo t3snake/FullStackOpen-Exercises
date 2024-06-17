@@ -17,14 +17,14 @@ const getBlogs = async () => {
 
 const addBlog = async (title, url, author) => {
     const response = await axios.post(
-        baseUrl, 
+        baseUrl,
         {
             title,
             url,
             author
-        }, 
-        { 
-            headers: {Authorization: token}
+        },
+        {
+            headers: { Authorization: token }
         })
     return response.data
 }
@@ -46,9 +46,9 @@ const addLikeOnBlog = async (blog) => {
 
 const deleteBlog = async (id) => {
     return await axios.delete(
-        `${baseUrl}/${id}`, 
-        { 
-            headers: {Authorization: token}
+        `${baseUrl}/${id}`,
+        {
+            headers: { Authorization: token }
         })
 }
 

@@ -15,8 +15,8 @@ const BlogPage = ({ user, setUser, message, setMessage, setMessageType }) => {
     }
 
     const toggleButtonText = () => {
-        if (isCreateVisible) return "Close"
-        return "Add Blog"
+        if (isCreateVisible) return 'Close'
+        return 'Add Blog'
     }
 
     const logout = () => {
@@ -57,17 +57,16 @@ const BlogPage = ({ user, setUser, message, setMessage, setMessageType }) => {
             { isCreateVisible && <BlogForm {...blogFormProps} /> }
 
             {/* Button to toggle Form */}
-            <button onClick={toggleVisibilityCreate}> 
+            <button onClick={toggleVisibilityCreate}>
                 {toggleButtonText()}
             </button>
 
-                        
-            <h2> Blogs </h2>  
+            <h2> Blogs </h2>
             {blogs.map(blog =>
                 <Blog key={blog.id} blog={blog} {...blogProps} />
             )}
         </div>
     )
 }
-  
+
 export default BlogPage

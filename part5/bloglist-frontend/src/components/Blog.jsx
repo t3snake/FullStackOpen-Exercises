@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from 'react'
 
 const Blog = ({ blog, blogService, setMessage, setMessageType, getAllBlogs }) => {
     const [isDetailVisible, setDetailsVisible] = useState(false)
@@ -15,7 +15,7 @@ const Blog = ({ blog, blogService, setMessage, setMessageType, getAllBlogs }) =>
     }
 
     const detailsStyle = {
-        display: isDetailVisible? '': "none",
+        display: isDetailVisible? '': 'none',
         textIndent: '20px'
     }
 
@@ -50,7 +50,7 @@ const Blog = ({ blog, blogService, setMessage, setMessageType, getAllBlogs }) =>
 
     return (
         <div style={blogStyle}>
-            {blog.title} 
+            {blog.title}
             <button onClick={toggleDetails}> {toggleButtonText()} </button>
             <div style={detailsStyle}>
                 <div>by {blog.author}</div>
@@ -61,8 +61,8 @@ const Blog = ({ blog, blogService, setMessage, setMessageType, getAllBlogs }) =>
                 </div>
                 <button onClick={deleteUser}>Delete</button>
             </div>
-        </div>  
-      )
-      
+        </div>
+    )
 }
+
 export default Blog
