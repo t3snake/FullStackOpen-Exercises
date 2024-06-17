@@ -9,7 +9,10 @@ const setToken = (tokenString) => {
 
 const getBlogs = async () => {
     const response = await axios.get(baseUrl)
-    return response.data
+    const users = response.data.toSorted( (user1, user2) => {
+        return user2.likes - user1.likes
+    })
+    return users
 }
 
 const addBlog = async (title, url, author) => {
@@ -41,4 +44,12 @@ const addLikeOnBlog = async (blog) => {
     return response.data
 }
 
-export default { setToken, getBlogs, addBlog, addLikeOnBlog }
+const deleteBlog = async (id) => {
+    return await axios.delete(
+        `${baseUrl}/${id}`, 
+        { 
+            headers: {Authorization: token}
+        })
+}
+
+export default { setToken, getBlogs, addBlog, addLikeOnBlog, deleteBlog }

@@ -15,7 +15,7 @@ const BlogPage = ({ user, setUser, message, setMessage, setMessageType }) => {
     }
 
     const toggleButtonText = () => {
-        if (isCreateVisible) return "Cancel"
+        if (isCreateVisible) return "Close"
         return "Add Blog"
     }
 
@@ -40,8 +40,8 @@ const BlogPage = ({ user, setUser, message, setMessage, setMessageType }) => {
 
     const blogProps = {
         blogService,
-        blogs,
-        setBlogs,
+        setMessage,
+        setMessageType,
         getAllBlogs
     }
 

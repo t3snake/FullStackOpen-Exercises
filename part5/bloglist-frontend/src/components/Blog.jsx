@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const Blog = ({ blog, blogService, blogs, setBlogs, getAllBlogs }) => {
+const Blog = ({ blog, blogService, setMessage, setMessageType, getAllBlogs }) => {
     const [isDetailVisible, setDetailsVisible] = useState(false)
 
     const toggleDetails = () => {
@@ -31,6 +31,23 @@ const Blog = ({ blog, blogService, blogs, setBlogs, getAllBlogs }) => {
 
     }
 
+    const deleteUser = async () => {
+        try {
+            if( window.confirm(`Delete Blog ${blog.title}?`) ) {
+                const response = await blogService.deleteBlog(blog.id)
+                if ( response.status === 204) {
+                    await getAllBlogs()
+
+                    setMessage(`Blog: ${blog.title} deleted successfully`)
+                    setMessageType('success')
+                }
+            }
+        } catch (error) {
+            setMessage(`Blog delete failed due to ${error.message}`)
+            setMessageType('error')
+        }
+    }
+
     return (
         <div style={blogStyle}>
             {blog.title} 
@@ -42,6 +59,7 @@ const Blog = ({ blog, blogService, blogs, setBlogs, getAllBlogs }) => {
                     {blog.likes}
                     <button onClick={addLike}>Like</button>
                 </div>
+                <button onClick={deleteUser}>Delete</button>
             </div>
         </div>  
       )
