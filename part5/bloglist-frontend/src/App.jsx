@@ -4,6 +4,10 @@ import LoginPage from './components/LoginPage'
 
 const App = () => {
     const [user, setUser] = useState(null)
+    const [message, setMessage] = useState('')
+    const [messageType, setMessageType] = useState('error')
+
+    const state = { user, setUser, message, setMessage, messageType, setMessageType}
 
     useEffect(() => {    
         const loggedUserJSON = window.localStorage.getItem('loggedInBlogListUser')    
@@ -15,12 +19,12 @@ const App = () => {
 
     if (user === null) {
         return (
-            <LoginPage setUser={setUser} />
+            <LoginPage {...state} />
         )
     }
 
     return (
-        <BlogPage user={user} setUser={setUser} />
+        <BlogPage {...state} />
     )
   
 }

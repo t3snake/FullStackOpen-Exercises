@@ -1,10 +1,11 @@
 import { useState } from 'react'
+import Toast from './Toast'
 import loginService from '../services/login'
 
-const LoginPage = ({ setUser }) => {
+const LoginPage = ({ setUser, message, setMessage, messageType, setMessageType }) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [error, setError] = useState('')
+    
     
     const handleLogin = async (event) => {
         event.preventDefault()
@@ -17,20 +18,17 @@ const LoginPage = ({ setUser }) => {
             setPassword('')
         } catch (error) {
             if ( error.response.status === 401 ) {
-                setError('Incorrect Credentials')
+                setMessage('Incorrect Credentials')
             } else {
-                setError(error.message)
+                setMessage(error.message)
             }
-            setTimeout(() => setError(''), 3000)
+            setMessageType('error')
         }
-    }
-
-    const errorStyle = {
-        color: 'red'
     }
 
     return(
         <div>
+            <Toast message={message} setMessage={setMessage} messageType={messageType} setMessageType={setMessageType} />
             <h2>Log in to application</h2>
             <form onSubmit={handleLogin}>
                 <div>
@@ -50,7 +48,6 @@ const LoginPage = ({ setUser }) => {
                     name="Password"
                     onChange={({target}) => setPassword(target.value)}/>
                 </div>
-                { (error !== '') && <div style={errorStyle}> {error} </div>}
                 <button type='submit'> Login </button>
             </form>
         </div>
