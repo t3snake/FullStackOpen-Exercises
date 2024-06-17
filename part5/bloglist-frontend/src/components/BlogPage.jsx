@@ -1,22 +1,22 @@
 import { useState, useEffect } from 'react'
 import Blog from './Blog'
+import BlogForm from './BlogForm'
 import Toast from './Toast'
 import blogService from '../services/blogs'
 
 const BlogPage = ({ user, setUser, message, setMessage, setMessageType }) => {
     const [blogs, setBlogs] = useState([])
-
-    // State for create form inputs
-    const [title, setTitle] = useState('')
-    const [url, setUrl] = useState('')
-    const [author, setAuthor] = useState('')
+    const [isCreateVisible, setCreateVisible] = useState(false)
 
     blogService.setToken(user.token)
 
-    const getAllBlogs = async () => {
-        const response = await blogService.getBlogs()
-        const allBlogs = response.filter(blog => blog.user.username === user.username)
-        setBlogs(allBlogs)
+    const toggleVisibilityCreate = () => {
+        setCreateVisible(!isCreateVisible)
+    }
+
+    const toggleButtonText = () => {
+        if (isCreateVisible) return "Cancel"
+        return "Add Blog"
     }
 
     const logout = () => {
@@ -24,31 +24,19 @@ const BlogPage = ({ user, setUser, message, setMessage, setMessageType }) => {
         setUser(null)
     }
 
-    const createNewBlog = async (event) => {
-        event.preventDefault()
-
-        try{
-            const newBlog = await blogService.addBlog(title, url, author)
-            const newBlogs = blogs.concat(newBlog)
-            setBlogs(newBlogs)
-
-            setMessage(`${title} successfully added`)
-            setMessageType('success')
-
-            setTitle('')
-            setAuthor('')
-            setUrl('')
-        } catch(error) {
-            setMessage(`Blog add failed due to ${error.message}`)
-            setMessageType('error')
-        }
-        
-
+    const getAllBlogs = async () => {
+        const response = await blogService.getBlogs()
+        const allBlogs = response.filter(blog => blog.user.username === user.username)
+        setBlogs(allBlogs)
     }
 
     useEffect( () => {
         getAllBlogs()
     }, [])
+
+    const blogFormProps = {
+        blogs, setBlogs, setMessage, setMessageType, blogService
+    }
 
     return (
         <div>
@@ -58,43 +46,19 @@ const BlogPage = ({ user, setUser, message, setMessage, setMessageType }) => {
             </p>
 
             <Toast message={message} setMessage={setMessage} />
-            
-            <h2> blogs </h2>  
+
+            { isCreateVisible && <BlogForm {...blogFormProps} /> }
+
+            {/* Button to toggle Form */}
+            <button onClick={toggleVisibilityCreate}> 
+                {toggleButtonText()}
+            </button>
+
+                        
+            <h2> Blogs </h2>  
             {blogs.map(blog =>
                 <Blog key={blog.id} blog={blog} />
             )}
-
-            <h2> Add new blog </h2>
-            <form onSubmit={createNewBlog}>
-                <div>
-                    Title:
-                    <input 
-                    type="text"
-                    value={title}
-                    name="Title"
-                    onChange={({target}) => setTitle(target.value)}/>
-                </div>
-
-                <div>
-                    Author:
-                    <input 
-                    type="text"
-                    value={author}
-                    name="Author"
-                    onChange={({target}) => setAuthor(target.value)}/>
-                </div>
-
-                <div>
-                    URL:
-                    <input 
-                    type="text"
-                    value={url}
-                    name="URL"
-                    onChange={({target}) => setUrl(target.value)}/>
-                </div>
-
-                <button type='submit'> Add </button>
-            </form>
         </div>
     )
 }
