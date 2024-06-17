@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, blogService, blogs, setBlogs, getAllBlogs }) => {
     const [isDetailVisible, setDetailsVisible] = useState(false)
 
     const toggleDetails = () => {
@@ -23,7 +23,11 @@ const Blog = ({ blog }) => {
         return isDetailVisible ? 'Hide': 'Show more'
     }
 
-    const addLike = () => {
+    const addLike = async () => {
+        const modifiedBlog = await blogService.addLikeOnBlog(blog)
+        const id = blog.id
+
+        await getAllBlogs()
 
     }
 

@@ -38,6 +38,13 @@ const BlogPage = ({ user, setUser, message, setMessage, setMessageType }) => {
         blogs, setBlogs, setMessage, setMessageType, blogService
     }
 
+    const blogProps = {
+        blogService,
+        blogs,
+        setBlogs,
+        getAllBlogs
+    }
+
     return (
         <div>
             <p>
@@ -57,7 +64,7 @@ const BlogPage = ({ user, setUser, message, setMessage, setMessageType }) => {
                         
             <h2> Blogs </h2>  
             {blogs.map(blog =>
-                <Blog key={blog.id} blog={blog} />
+                <Blog key={blog.id} blog={blog} {...blogProps} />
             )}
         </div>
     )
