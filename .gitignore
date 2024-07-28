@@ -1,1 +1,4 @@
 .vscode/launch.json
+*/.env
+./part4/bloglist/.env
+part4/bloglist/.env
