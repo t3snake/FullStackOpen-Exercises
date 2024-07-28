@@ -52,8 +52,7 @@ const Blog = ({ blog, blogService, setMessage, setMessageType, getAllBlogs }) =>
         <div style={blogStyle}>
             {blog.title}
             <button onClick={toggleDetails}> {toggleButtonText()} </button>
-            <div style={detailsStyle}>
-                <div>by {blog.author}</div>
+            <div className="togglable-info" style={detailsStyle}>
                 <div>{blog.url}</div>
                 <div>
                     {blog.likes}
@@ -61,6 +60,7 @@ const Blog = ({ blog, blogService, setMessage, setMessageType, getAllBlogs }) =>
                 </div>
                 <button onClick={deleteUser}>Delete</button>
             </div>
+            <div>by {blog.author}</div>
         </div>
     )
 }
