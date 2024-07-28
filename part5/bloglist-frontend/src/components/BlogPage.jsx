@@ -30,13 +30,6 @@ const BlogPage = ({ user, setUser, message, setMessage, setMessageType }) => {
         setBlogs(allBlogs)
     }
 
-    const addLike = async (blog) => {
-        const modifiedBlog = await blogService.addLikeOnBlog(blog)
-        const id = blog.id
-
-        await getAllBlogs()
-    }
-
     useEffect( () => {
         getAllBlogs()
     }, [])
@@ -53,8 +46,7 @@ const BlogPage = ({ user, setUser, message, setMessage, setMessageType }) => {
         blogService,
         setMessage,
         setMessageType,
-        getAllBlogs,
-        addLike,
+        getAllBlogs
     }
 
     return (

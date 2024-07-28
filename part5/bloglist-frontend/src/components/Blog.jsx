@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const Blog = ({ blog, blogService, setMessage, setMessageType, getAllBlogs, addLike }) => {
+const Blog = ({ blog, blogService, setMessage, setMessageType, getAllBlogs }) => {
     const [isDetailVisible, setDetailsVisible] = useState(false)
 
     const toggleDetails = () => {
@@ -40,6 +40,13 @@ const Blog = ({ blog, blogService, setMessage, setMessageType, getAllBlogs, addL
         }
     }
 
+    const addLike = async () => {
+        const modifiedBlog = await blogService.addLikeOnBlog(blog)
+        const id = blog.id
+        console.log(getAllBlogs)
+        await getAllBlogs()
+    }
+
     return (
         <div style={blogStyle}>
             {blog.title}
@@ -48,7 +55,7 @@ const Blog = ({ blog, blogService, setMessage, setMessageType, getAllBlogs, addL
                 <div>{blog.url}</div>
                 <div>
                     {blog.likes}
-                    <button onClick={() => addLike(blog)}>Like</button>
+                    <button onClick={addLike}>Like</button>
                 </div>
                 <button onClick={deleteUser}>Delete</button>
             </div>

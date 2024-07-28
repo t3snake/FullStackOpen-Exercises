@@ -38,6 +38,7 @@ const BlogForm = ({ blogs, setBlogs, setMessage, setMessageType, blogService }) 
                         value={title}
                         name="Title"
                         onChange={({ target }) => setTitle(target.value)}
+                        id="field-title"
                     />
                 </div>
 
@@ -48,6 +49,7 @@ const BlogForm = ({ blogs, setBlogs, setMessage, setMessageType, blogService }) 
                         value={author}
                         name="Author"
                         onChange={({ target }) => setAuthor(target.value)}
+                        id="field-author"
                     />
                 </div>
 
@@ -58,6 +60,7 @@ const BlogForm = ({ blogs, setBlogs, setMessage, setMessageType, blogService }) 
                         value={url}
                         name="URL"
                         onChange={({ target }) => setUrl(target.value)}
+                        id="field-url"
                     />
                 </div>
 
