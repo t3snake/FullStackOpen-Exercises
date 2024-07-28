@@ -30,19 +30,31 @@ const BlogPage = ({ user, setUser, message, setMessage, setMessageType }) => {
         setBlogs(allBlogs)
     }
 
+    const addLike = async (blog) => {
+        const modifiedBlog = await blogService.addLikeOnBlog(blog)
+        const id = blog.id
+
+        await getAllBlogs()
+    }
+
     useEffect( () => {
         getAllBlogs()
     }, [])
 
     const blogFormProps = {
-        blogs, setBlogs, setMessage, setMessageType, blogService
+        blogs, 
+        setBlogs, 
+        setMessage, 
+        setMessageType, 
+        blogService
     }
 
     const blogProps = {
         blogService,
         setMessage,
         setMessageType,
-        getAllBlogs
+        getAllBlogs,
+        addLike,
     }
 
     return (
