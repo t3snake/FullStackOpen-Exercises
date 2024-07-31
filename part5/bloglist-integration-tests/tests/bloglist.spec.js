@@ -67,19 +67,26 @@ describe('Blog app', () => {
             await login(page, 'test.user', 'test@password')
             await page.getByRole('button').getByText('Add Blog').click()      
             await fillBlogForm(page, 'blog.title', 'blog.author', 'blog.url')
+            await page.getByRole('button').getByText('Show More').click()
 
         })
 
         test('new blog has 0 likes initially', async ({ page }) => {
-            await page.getByRole('button').getByText('Show More').click()
             await expect(page.getByTestId('likes')).toContainText('0')
         })
       
         test('blog can be liked', async ({ page }) => {
-            await page.getByRole('button').getByText('Show More').click()
             await page.getByRole('button').getByText('Like').click()
 
             await expect(page.getByTestId('likes')).toContainText(/1/)
+        })
+
+        test('blog can be deleted by same user', async ({ page }) => {
+            page.on('dialog', dialog => dialog.accept())
+            await page.getByRole('button').getByText('Delete').click()
+
+            await expect(page.getByText(/blog.title deleted/)).toBeVisible()
+
         })
       })
 })
