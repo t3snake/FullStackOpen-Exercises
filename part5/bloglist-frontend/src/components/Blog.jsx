@@ -43,13 +43,12 @@ const Blog = ({ blog, blogService, setMessage, setMessageType, getAllBlogs }) =>
     const addLike = async () => {
         const modifiedBlog = await blogService.addLikeOnBlog(blog)
         const id = blog.id
-        console.log(getAllBlogs)
         await getAllBlogs()
     }
 
     return (
         <div style={blogStyle}>
-            {blog.title}
+            <span data-testid="blog-title">{blog.title}</span>
             <button onClick={toggleDetails}> {toggleButtonText()} </button>
             <div className="togglable-info" style={detailsStyle}>
                 <div>{blog.url}</div>

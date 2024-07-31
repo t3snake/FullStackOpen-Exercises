@@ -64,7 +64,6 @@ test('toggles visibility on clicking show', async () => {
 
 test('clicks on like button executes addClick function', async () => {
     let user = userEvent.setup()
-    console.log(blogProps)
     let container = render(<Blog key={1} blog={blog} blogService={blogService} {...blogProps} /> ).container
 
     const showButton = screen.getByText('show', { exact: false })

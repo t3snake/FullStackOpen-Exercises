@@ -22,6 +22,7 @@ test('test BlogForm', async () => {
         setMessage, 
         setMessageType,
     }
+    
     let blogService = { }
     blogService.addBlog = vi.fn( (title, url, author) => 1 )
     blogService.getAllBlogs = vi.fn()
@@ -30,13 +31,13 @@ test('test BlogForm', async () => {
 
     const container = render(<BlogForm blogService={blogService} {...blogFormProps} />).container
 
-    const titleField = container.querySelector('#field-title')
+    const titleField = screen.getByTestId('title-field')
     await user.type(titleField, 'ABC')
 
-    const authorField = container.querySelector('#field-author')
+    const authorField = screen.getByTestId('author-field')
     await user.type(authorField, 'XYZ')
 
-    const urlField = container.querySelector('#field-url')
+    const urlField = screen.getByTestId('url-field')
     await user.type(urlField, 'abc.com')
 
     const addButton = screen.getByText('Add')
