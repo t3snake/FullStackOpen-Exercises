@@ -52,7 +52,7 @@ const Blog = ({ blog, blogService, setMessage, setMessageType, getAllBlogs }) =>
             <button onClick={toggleDetails}> {toggleButtonText()} </button>
             <div className="togglable-info" style={detailsStyle}>
                 <div>{blog.url}</div>
-                <div>
+                <div data-testid="likes">
                     {blog.likes}
                     <button onClick={addLike}>Like</button>
                 </div>

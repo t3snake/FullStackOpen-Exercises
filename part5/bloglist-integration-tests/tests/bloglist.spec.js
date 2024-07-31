@@ -1,8 +1,8 @@
 const { describe, test, expect, beforeEach } = require('@playwright/test')
 
 const login = async (page, username, password) => {
-    await page.getByTestId('user.field').fill(username)
-    await page.getByTestId('password.field').fill(password)
+    await page.getByTestId('user-field').fill(username)
+    await page.getByTestId('password-field').fill(password)
 
     await page.getByRole('button').getByText('Login').click()
 }
@@ -59,6 +59,27 @@ describe('Blog app', () => {
             const locator = await page.getByTestId('blog-title')
             await expect(locator).toContainText('blog.title')
             await expect(locator).toBeVisible()
+        })
+      })
+
+      describe('Blog interactions', () => {
+        beforeEach(async ({ page }) => {
+            await login(page, 'test.user', 'test@password')
+            await page.getByRole('button').getByText('Add Blog').click()      
+            await fillBlogForm(page, 'blog.title', 'blog.author', 'blog.url')
+
+        })
+
+        test('new blog has 0 likes initially', async ({ page }) => {
+            await page.getByRole('button').getByText('Show More').click()
+            await expect(page.getByTestId('likes')).toContainText('0')
+        })
+      
+        test('blog can be liked', async ({ page }) => {
+            await page.getByRole('button').getByText('Show More').click()
+            await page.getByRole('button').getByText('Like').click()
+
+            await expect(page.getByTestId('likes')).toContainText(/1/)
         })
       })
 })
