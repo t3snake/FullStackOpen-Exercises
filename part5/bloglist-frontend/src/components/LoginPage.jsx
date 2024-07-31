@@ -37,6 +37,7 @@ const LoginPage = ({ setUser, message, setMessage, messageType, setMessageType }
                         type="text"
                         value={username}
                         name="Username"
+                        data-testid="user.field"
                         onChange={({ target }) => setUsername(target.value)}
                     />
                 </div>
@@ -47,6 +48,7 @@ const LoginPage = ({ setUser, message, setMessage, messageType, setMessageType }
                         type="password"
                         value={password}
                         name="Password"
+                        data-testid="password.field"
                         onChange={({ target }) => setPassword(target.value)}/>
                 </div>
                 <button type='submit'> Login </button>
