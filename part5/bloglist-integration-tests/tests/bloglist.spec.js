@@ -29,7 +29,7 @@ describe('Blog app', () => {
     })
   
     test('Login form is shown', async ({ page }) => {
-        const locator = await page.getByText('Log in to application')
+        const locator = page.getByText('Log in to application')
         await expect(locator).toBeVisible()
     })
 
@@ -56,7 +56,7 @@ describe('Blog app', () => {
             await expect(page.getByText('Add new blog')).toBeVisible()
 
             await fillBlogForm(page, 'blog.title', 'blog.author', 'blog.url')
-            const locator = await page.getByTestId('blog-title')
+            const locator = page.getByTestId('blog-title')
             await expect(locator).toContainText('blog.title')
             await expect(locator).toBeVisible()
         })
@@ -116,10 +116,31 @@ describe('Blog app', () => {
         })
 
         test('delete isnt visible for blog not added by logged in user', async ({page}) => {
-            const firstElement = await page.getByTestId('blog-title').getByText('blog.title').locator('..')
+            const firstElement = page.getByTestId('blog-title').getByText('blog.title').locator('..')
             await firstElement.getByRole('button').getByText('Show more').click()
 
             await expect(firstElement.getByRole('button').getByText('Delete')).toHaveCount(0)
+        })
+
+        test('blogs are ordered by most likes', async({ page }) => {
+            const firstBlog = page.getByTestId('blog-title').first().locator('..')
+            await firstBlog.getByRole('button').getByText('Show more').click()
+            await expect(firstBlog.getByTestId('likes')).toContainText(/1/)
+            await expect(firstBlog).toContainText(/blog.title/)
+
+            const secondBlog = page.getByTestId('blog-title').last().locator('..')
+            await secondBlog.getByRole('button').getByText('Show more').click()
+            await expect(secondBlog.getByTestId('likes')).toContainText(/0/)
+            await expect(secondBlog).toContainText(/blog2.title/)
+
+            // Change order by liking second blog
+            await secondBlog.getByRole('button').getByText('Like').click()
+            await secondBlog.getByTestId('likes').getByText(/1/).waitFor() //wait for like to register
+            await secondBlog.getByRole('button').getByText('Like').click()
+
+            const newFirstBlog = page.getByTestId('blog-title').first().locator('..')
+            await expect(newFirstBlog).toContainText(/blog2.title/)
+            
         })
     })
 })
