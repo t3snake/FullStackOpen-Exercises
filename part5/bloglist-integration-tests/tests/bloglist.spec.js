@@ -115,7 +115,7 @@ describe('Blog app', () => {
 
         })
 
-        test.only('delete isnt visible for blog not added by logged in user', async ({page}) => {
+        test('delete isnt visible for blog not added by logged in user', async ({page}) => {
             const firstElement = await page.getByTestId('blog-title').getByText('blog.title').locator('..')
             await firstElement.getByRole('button').getByText('Show more').click()
 
