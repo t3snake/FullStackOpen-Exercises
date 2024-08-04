@@ -1,11 +1,13 @@
 import { useState } from 'react'
 
-const Blog = ({ blog, blogService, setMessage, setMessageType, getAllBlogs }) => {
+const Blog = ({ blog, user, blogService, setMessage, setMessageType, getAllBlogs }) => {
     const [isDetailVisible, setDetailsVisible] = useState(false)
 
     const toggleDetails = () => {
         setDetailsVisible(!isDetailVisible)
     }
+
+    const isBlogByUser = blog.user.username === user.username
 
     const blogStyle = {
         margin: '20px',
@@ -54,9 +56,9 @@ const Blog = ({ blog, blogService, setMessage, setMessageType, getAllBlogs }) =>
                 <div>{blog.url}</div>
                 <div data-testid="likes">
                     {blog.likes}
-                    <button onClick={addLike}>Like</button>
+                   <button onClick={addLike}>Like</button>
                 </div>
-                <button onClick={deleteUser}>Delete</button>
+                {isBlogByUser && <button onClick={deleteUser}>Delete</button>}
             </div>
             <div>by {blog.author}</div>
         </div>

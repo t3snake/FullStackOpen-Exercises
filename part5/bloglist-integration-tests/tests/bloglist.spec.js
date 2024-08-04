@@ -62,7 +62,7 @@ describe('Blog app', () => {
         })
       })
 
-      describe('Blog interactions', () => {
+    describe('Blog interactions', () => {
         beforeEach(async ({ page }) => {
             await login(page, 'test.user', 'test@password')
             await page.getByRole('button').getByText('Add Blog').click()      
@@ -86,7 +86,40 @@ describe('Blog app', () => {
             await page.getByRole('button').getByText('Delete').click()
 
             await expect(page.getByText(/blog.title deleted/)).toBeVisible()
+        })
+    })
+
+    describe('Blog multiple users test', () => {
+        beforeEach(async ({ page, request }) => {
+            await login(page, 'test.user', 'test@password')
+
+            await page.getByRole('button').getByText('Add Blog').click()      
+            await fillBlogForm(page, 'blog.title', 'blog.author', 'blog.url')
+
+            await page.getByRole('button').getByText('Show More').click()
+            await page.getByRole('button').getByText('Like').click()
+
+            await page.getByRole('button').getByText('Logout').click()
+
+            await request.post('http://localhost:3003/api/users', {
+                data: {
+                    name: 'test user 2',
+                    username: 'test.user2',
+                    password: 'test@password2'
+                }
+            })
+
+            await login(page, 'test.user2', 'test@password2')
+            await page.getByRole('button').getByText('Add Blog').click()      
+            await fillBlogForm(page, 'blog2.title', 'blog2.author', 'blog2.url')
 
         })
-      })
+
+        test.only('delete isnt visible for blog not added by logged in user', async ({page}) => {
+            const firstElement = await page.getByTestId('blog-title').getByText('blog.title').locator('..')
+            await firstElement.getByRole('button').getByText('Show more').click()
+
+            await expect(firstElement.getByRole('button').getByText('Delete')).toHaveCount(0)
+        })
+    })
 })

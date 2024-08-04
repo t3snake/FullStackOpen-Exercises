@@ -25,9 +25,8 @@ const BlogPage = ({ user, setUser, message, setMessage, setMessageType }) => {
     }
 
     const getAllBlogs = async () => {
-        const response = await blogService.getBlogs()
-        const allBlogs = response.filter(blog => blog.user.username === user.username)
-        setBlogs(allBlogs)
+        const newBlogs = await blogService.getBlogs()
+        setBlogs(newBlogs)
     }
 
     useEffect( () => {
@@ -35,18 +34,19 @@ const BlogPage = ({ user, setUser, message, setMessage, setMessageType }) => {
     }, [])
 
     const blogFormProps = {
-        blogs, 
         setBlogs, 
         setMessage, 
         setMessageType, 
-        blogService
+        blogService,
+        getAllBlogs
     }
 
     const blogProps = {
+        user,
         blogService,
         setMessage,
         setMessageType,
-        getAllBlogs
+        getAllBlogs,
     }
 
     return (

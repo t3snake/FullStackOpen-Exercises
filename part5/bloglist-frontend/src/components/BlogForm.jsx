@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const BlogForm = ({ blogs, setBlogs, setMessage, setMessageType, blogService }) => {
+const BlogForm = ({ setBlogs, setMessage, setMessageType, blogService, getAllBlogs }) => {
 
     // State for create form inputs
     const [title, setTitle] = useState('')
@@ -12,8 +12,7 @@ const BlogForm = ({ blogs, setBlogs, setMessage, setMessageType, blogService }) 
 
         try{
             const newBlog = await blogService.addBlog(title, url, author)
-            const newBlogs = blogs.concat(newBlog)
-            setBlogs(newBlogs)
+            await getAllBlogs()
 
             setMessage(`${title} successfully added`)
             setMessageType('success')

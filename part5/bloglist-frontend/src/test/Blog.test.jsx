@@ -11,6 +11,10 @@ const blog = {
     user: "123"
 }
 
+const user = {
+    username: "test.user",
+}
+
 let blogProps = {}
 let blogService = {}
 
@@ -24,6 +28,7 @@ beforeEach(() => {
     blogService.addLikeOnBlog = vi.fn( (blog) => 1 )
 
     blogProps = {
+        user,
         setMessage,
         setMessageType,
         getAllBlogs,

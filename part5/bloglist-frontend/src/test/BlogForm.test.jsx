@@ -12,15 +12,19 @@ test('test BlogForm', async () => {
         likes: 15,
         user: "123"
     },]
+
     const setBlogs = vi.fn()
     const setMessage = vi.fn()
     const setMessageType = vi.fn()
+    const getAllBlogs = vi.fn()
+
 
     const blogFormProps = {
         blogs, 
         setBlogs, 
         setMessage, 
         setMessageType,
+        getAllBlogs
     }
     
     let blogService = { }
