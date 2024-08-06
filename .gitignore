@@ -2,3 +2,5 @@
 */.env
 ./part4/bloglist/.env
 part4/bloglist/.env
+*/.DS_Store
+.DS_Store
