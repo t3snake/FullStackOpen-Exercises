@@ -17,6 +17,17 @@ const asObject = (anecdote) => {
     }
 }
 
+export const addAnecdoteAction = (content) => {
+    return {
+        type: "New-Anecdote",
+        payload: {
+            content: content,
+            id: getId(),
+            votes: 0
+        }
+    }
+}
+
 export const voteAction = (id) => {
     return {
         type: "Vote",
@@ -45,6 +56,9 @@ const reducer = (state = initialState, action) => {
                     return anecdote
                 }
             })
+            break;
+        case "New-Anecdote":
+            newState = state.concat(action.payload)
             break;
         default:
             newState = state.filter(a => a)
