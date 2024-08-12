@@ -18,7 +18,6 @@ const App = () => {
 
     useEffect(() => {
         anecdoteService.getAll().then(anecdote => {
-            console.log(anecdote)
             dispatch(setAnecdotes(anecdote))
         })
     }, [])
