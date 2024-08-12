@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { createSelector } from '@reduxjs/toolkit'
 
 const anecdotesAtStart = [
     'If it hurts, do it more often',
@@ -46,6 +47,13 @@ const anecdoteSlice = createSlice({
             })
         }
     }
+})
+
+const selectAnecdotes = state => state.anecdotes
+const selectFilterText = state => state.filterText
+
+export const getFilteredAnecdotes = createSelector([selectAnecdotes, selectFilterText], (anecdotes, filterText) => {
+    return anecdotes.filter(anecdote => anecdote.content.includes(filterText))
 })
 
 export const {add, vote} = anecdoteSlice.actions

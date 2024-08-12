@@ -1,16 +1,25 @@
 import AnecdoteList from "./components/AnecdoteList"
 import AnecdoteForm from "./components/AnecdoteForm"
 import Filter from "./components/Filter"
-import Notification from "./components/Notification"
+import Notifications from "./components/Notifications"
 
 const App = () => {
+    const style = {
+        width: '40%'
+    }
+
     return (
         <div>
-            <h2>Anecdotes</h2>
-            <Notification />
-            <Filter />
-            <AnecdoteList />
-            <AnecdoteForm />
+            <span style={style}>
+                <h2>Anecdotes</h2>
+                <Filter />
+                <AnecdoteList />
+                <AnecdoteForm />
+            </span>
+            <span style={style}>
+                <Notifications />
+            </span>
+            
         </div>
     )
 }
