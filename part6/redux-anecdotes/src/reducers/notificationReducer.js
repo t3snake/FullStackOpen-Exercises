@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { createSelector } from '@reduxjs/toolkit'
+
+import { getId } from './anecdoteReducer'
 
 const initialState = []
 
@@ -20,4 +21,19 @@ const notificationSlice = createSlice({
 })
 
 export const { notify, clear } = notificationSlice.actions
+
+export const pushNotification= (message, timeout) => {
+    return async dispatch => {
+        // Show Notification
+        const notification = {
+            message,
+            id: getId()
+        }
+        dispatch(notify(notification))
+
+        // Disable notification after 3 seconds
+        setTimeout(function(){ dispatch(clear()); }, timeout*1000);
+    }
+}
+
 export default notificationSlice.reducer
