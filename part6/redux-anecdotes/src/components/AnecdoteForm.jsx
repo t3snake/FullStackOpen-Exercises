@@ -1,9 +1,7 @@
 import { useDispatch } from 'react-redux'
 
-import { createAnecdote } from '../reducers/anecdoteReducer'
+import { createAnecdote, getId } from '../reducers/anecdoteReducer'
 import { notify, clear } from '../reducers/notificationReducer'
-
-
 
 const AnecdoteForm = () => {
     const dispatch = useDispatch()
@@ -19,7 +17,7 @@ const AnecdoteForm = () => {
         // Show Notification
         const notification = {
             message: `You created anecdote with content: '${content}'`,
-            id: (10000*Math.random()).toFixed(0)
+            id: getId()
         }
         dispatch(notify(notification))
 
