@@ -13,11 +13,11 @@ const AnecdoteForm = () => {
         mutationFn: createAnecdote,
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ['anecdotes']})
-        }
+        },
     })
 
 
-    const onCreate = (event) => {
+    const onCreate = async (event) => {
         event.preventDefault()
         const content = event.target.anecdote.value
         event.target.anecdote.value = ''
@@ -27,22 +27,31 @@ const AnecdoteForm = () => {
             id: (100000 * Math.random()).toFixed(0),
             votes: 0,
         }
-        
-        newAnecdoteMutation.mutate(newAnecdote)
 
-        // Notify
-        dispatch({
-            type: 'NOTIFY',
-            payload: `Created '${content}'`
-        })
+        try {
+            const result = await newAnecdoteMutation.mutateAsync(newAnecdote)
 
-        // Disable notification after 3 seconds
-        setTimeout(function(){ 
+            // Notify success
             dispatch({
                 type: 'NOTIFY',
-                payload: ''
-            }) 
-        }, 5000);
+                payload: `Created '${content}'`
+            })
+        } catch (error) {
+            // Notify error
+            dispatch({
+                type: 'NOTIFY',
+                payload: error.response.data.error
+            })
+        } finally {
+            // Disable notification after 3 seconds
+            setTimeout(function(){ 
+                dispatch({
+                    type: 'NOTIFY',
+                    payload: ''
+                }) 
+            }, 5000);
+        }
+        
 }
 
   return (
