@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { createSlice } from '@reduxjs/toolkit'
 
 import { getId } from './anecdoteReducer'
@@ -31,7 +32,7 @@ export const pushNotification= (message, timeout) => {
         }
         dispatch(notify(notification))
 
-        // Disable notification after 3 seconds
+        // Disable notification after timeout seconds
         setTimeout(function(){ dispatch(clear()); }, timeout*1000);
     }
 }
