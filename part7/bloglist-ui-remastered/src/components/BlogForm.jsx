@@ -1,9 +1,8 @@
 import { useState } from "react";
+import { pushNotification } from "../reducers/notificationReducer";
+import { useDispatch } from "react-redux";
 
 const BlogForm = ({
-    setBlogs,
-    setMessage,
-    setMessageType,
     blogService,
     getAllBlogs,
 }) => {
@@ -12,6 +11,8 @@ const BlogForm = ({
     const [url, setUrl] = useState("");
     const [author, setAuthor] = useState("");
 
+    const dispatch = useDispatch()
+
     const createNewBlog = async (event) => {
         event.preventDefault();
 
@@ -19,15 +20,13 @@ const BlogForm = ({
             const newBlog = await blogService.addBlog(title, url, author);
             await getAllBlogs();
 
-            setMessage(`${title} successfully added`);
-            setMessageType("success");
+            dispatch(pushNotification(`${title} successfully added`, "success", 5))
 
             setTitle("");
             setAuthor("");
             setUrl("");
         } catch (error) {
-            setMessage(`Blog add failed due to ${error.message}`);
-            setMessageType("error");
+            dispatch(pushNotification(`Blog add failed due to ${error.message}`, "error", 5))
         }
     };
 

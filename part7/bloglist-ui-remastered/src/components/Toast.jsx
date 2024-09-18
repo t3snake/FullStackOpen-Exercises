@@ -1,6 +1,8 @@
-import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
-const Toast = ({ message, setMessage, messageType }) => {
+const Toast = () => {
+    const notifications = useSelector((state) => state.notifications);
+
     const errorStyle = {
         color: "#db0000",
         backgroundColor: "#fff2f2",
@@ -23,13 +25,18 @@ const Toast = ({ message, setMessage, messageType }) => {
         width: "calc(100% / 3)",
     };
 
-    const style = messageType === "error" ? errorStyle : successStyle;
-
-    useEffect(() => {
-        setTimeout(() => setMessage(""), 3000);
-    }, [message, setMessage]);
-
-    return message !== "" && <div style={style}> {message} </div>;
+    return (
+        <>
+            {notifications.map((notification) => {
+                const notificationStyle = notification.type === "Error" ? errorStyle : successStyle
+                return (
+                    <div key={notification.id} style={notificationStyle}>
+                        {notification.message}
+                    </div>
+                )
+            } )}
+        </>
+    );
 };
 
 export default Toast;

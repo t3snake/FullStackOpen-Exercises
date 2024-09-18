@@ -4,7 +4,7 @@ import BlogForm from "./BlogForm";
 import Toast from "./Toast";
 import blogService from "../services/blogs";
 
-const BlogPage = ({ user, setUser, message, setMessage, setMessageType }) => {
+const BlogPage = ({ user, setUser }) => {
     const [blogs, setBlogs] = useState([]);
     const [isCreateVisible, setCreateVisible] = useState(false);
 
@@ -35,8 +35,6 @@ const BlogPage = ({ user, setUser, message, setMessage, setMessageType }) => {
 
     const blogFormProps = {
         setBlogs,
-        setMessage,
-        setMessageType,
         blogService,
         getAllBlogs,
     };
@@ -44,8 +42,6 @@ const BlogPage = ({ user, setUser, message, setMessage, setMessageType }) => {
     const blogProps = {
         user,
         blogService,
-        setMessage,
-        setMessageType,
         getAllBlogs,
     };
 
@@ -56,7 +52,7 @@ const BlogPage = ({ user, setUser, message, setMessage, setMessageType }) => {
                 <button onClick={logout}>Logout</button>
             </p>
 
-            <Toast message={message} setMessage={setMessage} />
+            <Toast />
 
             {isCreateVisible && <BlogForm {...blogFormProps} />}
 

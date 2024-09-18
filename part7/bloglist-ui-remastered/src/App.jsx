@@ -4,16 +4,10 @@ import LoginPage from "./components/LoginPage";
 
 const App = () => {
     const [user, setUser] = useState(null);
-    const [message, setMessage] = useState("");
-    const [messageType, setMessageType] = useState("error");
 
     const state = {
         user,
         setUser,
-        message,
-        setMessage,
-        messageType,
-        setMessageType,
     };
 
     useEffect(() => {

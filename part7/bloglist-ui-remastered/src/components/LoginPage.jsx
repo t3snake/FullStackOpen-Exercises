@@ -2,13 +2,10 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import Toast from "./Toast";
 import loginService from "../services/login";
+import { pushNotification } from "../reducers/notificationReducer";
 
 const LoginPage = ({
     setUser,
-    message,
-    setMessage,
-    messageType,
-    setMessageType,
 }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -27,22 +24,16 @@ const LoginPage = ({
             setPassword("");
         } catch (error) {
             if (error.response.status === 401) {
-                setMessage("Incorrect Credentials");
+                pushNotification("Incorrect Credentials", "error")
             } else {
-                setMessage(error.message);
+                pushNotification(error.message, "error")
             }
-            setMessageType("error");
         }
     };
 
     return (
         <div>
-            <Toast
-                message={message}
-                setMessage={setMessage}
-                messageType={messageType}
-                setMessageType={setMessageType}
-            />
+            <Toast />
             <h2>Log in to application</h2>
             <form onSubmit={handleLogin}>
                 <div>
@@ -74,10 +65,6 @@ const LoginPage = ({
 
 LoginPage.propTypes = {
     setUser: PropTypes.func.isRequired,
-    message: PropTypes.string.isRequired,
-    setMessage: PropTypes.func.isRequired,
-    messageType: PropTypes.string.isRequired,
-    setMessageType: PropTypes.func.isRequired,
 };
 
 export default LoginPage;

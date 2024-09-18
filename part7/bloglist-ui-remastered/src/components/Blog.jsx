@@ -1,13 +1,15 @@
 import { useState } from "react";
+import { pushNotification } from "../reducers/notificationReducer";
+import { useDispatch } from "react-redux";
 
 const Blog = ({
     blog,
     user,
     blogService,
-    setMessage,
-    setMessageType,
     getAllBlogs,
 }) => {
+    const dispatch = useDispatch()
+
     const [isDetailVisible, setDetailsVisible] = useState(false);
 
     const toggleDetails = () => {
@@ -39,13 +41,11 @@ const Blog = ({
                 if (response.status === 204) {
                     await getAllBlogs();
 
-                    setMessage(`Blog: ${blog.title} deleted successfully`);
-                    setMessageType("success");
+                    dispatch(pushNotification(`Blog: ${blog.title} deleted successfully`, "success", 5))
                 }
             }
         } catch (error) {
-            setMessage(`Blog delete failed due to ${error.message}`);
-            setMessageType("error");
+            dispatch(pushNotification(`Blog delete failed due to ${error.message}`, "error", 5))
         }
     };
 
@@ -53,6 +53,8 @@ const Blog = ({
         const modifiedBlog = await blogService.addLikeOnBlog(blog);
         const id = blog.id;
         await getAllBlogs();
+
+        dispatch(pushNotification(`Liked ${blog.title}`, "error", 5))
     };
 
     return (
