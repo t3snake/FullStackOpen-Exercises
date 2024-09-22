@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { pushNotification } from "../reducers/notificationReducer";
 import { useDispatch } from "react-redux";
+
+import { initializeBlogs } from "../reducers/blogReducer";
+import { pushNotification } from "../reducers/notificationReducer";
+
 
 const Blog = ({
     blog,
     user,
     blogService,
-    getAllBlogs,
 }) => {
     const dispatch = useDispatch()
 
@@ -39,7 +41,7 @@ const Blog = ({
             if (window.confirm(`Delete Blog ${blog.title}?`)) {
                 const response = await blogService.deleteBlog(blog.id);
                 if (response.status === 204) {
-                    await getAllBlogs();
+                    dispatch(initializeBlogs())
 
                     dispatch(pushNotification(`Blog: ${blog.title} deleted successfully`, "success", 5))
                 }
@@ -52,7 +54,7 @@ const Blog = ({
     const addLike = async () => {
         const modifiedBlog = await blogService.addLikeOnBlog(blog);
         const id = blog.id;
-        await getAllBlogs();
+        dispatch(initializeBlogs())
 
         dispatch(pushNotification(`Liked ${blog.title}`, "error", 5))
     };

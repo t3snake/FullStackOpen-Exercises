@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { pushNotification } from "../reducers/notificationReducer";
+import { createBlog } from "../reducers/blogReducer";
 import { useDispatch } from "react-redux";
 
 const BlogForm = ({
+    user,
     blogService,
     getAllBlogs,
 }) => {
@@ -17,8 +19,9 @@ const BlogForm = ({
         event.preventDefault();
 
         try {
-            const newBlog = await blogService.addBlog(title, url, author);
-            await getAllBlogs();
+            // const newBlog = await blogService.addBlog(title, url, author);
+            // await getAllBlogs();
+            dispatch(createBlog(title, url, author, user))
 
             dispatch(pushNotification(`${title} successfully added`, "success", 5))
 

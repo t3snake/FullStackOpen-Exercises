@@ -1,17 +1,23 @@
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import Blog from "./Blog";
 import BlogForm from "./BlogForm";
 import Toast from "./Toast";
+
+import blogReducer, {toggleCreateFormVisibility, initializeBlogs} from "../reducers/blogReducer";
 import blogService from "../services/blogs";
 
 const BlogPage = ({ user, setUser }) => {
-    const [blogs, setBlogs] = useState([]);
-    const [isCreateVisible, setCreateVisible] = useState(false);
+    const {blogs, isCreateVisible} = useSelector(state => state.blogPage)
+    // const [blogs, setBlogs] = useState([]);
+    // const [isCreateVisible, setCreateVisible] = useState(false);
+    const dispatch = useDispatch()
 
     blogService.setToken(user.token);
 
     const toggleVisibilityCreate = () => {
-        setCreateVisible(!isCreateVisible);
+        dispatch(toggleCreateFormVisibility())
     };
 
     const toggleButtonText = () => {
@@ -24,25 +30,27 @@ const BlogPage = ({ user, setUser }) => {
         setUser(null);
     };
 
-    const getAllBlogs = async () => {
-        const newBlogs = await blogService.getBlogs();
-        setBlogs(newBlogs);
-    };
+    // const getAllBlogs = async () => {
+    //     const newBlogs = await blogService.getBlogs();
+    //     setBlogs(newBlogs);
+    // };
 
     useEffect(() => {
-        getAllBlogs();
+        // getAllBlogs();
+        dispatch(initializeBlogs())
     }, []);
 
     const blogFormProps = {
-        setBlogs,
+        // setBlogs,
+        user,
         blogService,
-        getAllBlogs,
+        // getAllBlogs,
     };
 
     const blogProps = {
         user,
         blogService,
-        getAllBlogs,
+        // getAllBlogs,
     };
 
     return (
