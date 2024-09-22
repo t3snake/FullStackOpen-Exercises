@@ -9,10 +9,10 @@ const setToken = (tokenString) => {
 
 const getBlogs = async () => {
     const response = await axios.get(baseUrl);
-    const users = response.data.toSorted((user1, user2) => {
-        return user2.likes - user1.likes;
+    const blogs = response.data.toSorted((blog1, blog2) => {
+        return blog2.likes - blog1.likes;
     });
-    return users;
+    return blogs;
 };
 
 const addBlog = async (title, url, author) => {

@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { pushNotification } from "../reducers/notificationReducer";
 import { createBlog } from "../reducers/blogReducer";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-const BlogForm = ({
-    user,
-}) => {
+const BlogForm = () => {
     // State for create form inputs
     const [title, setTitle] = useState("");
     const [url, setUrl] = useState("");
     const [author, setAuthor] = useState("");
+
+    const user = useSelector(state => state.user)
 
     const dispatch = useDispatch()
 

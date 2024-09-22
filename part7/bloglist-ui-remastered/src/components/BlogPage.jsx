@@ -5,10 +5,13 @@ import Blog from "./Blog";
 import BlogForm from "./BlogForm";
 import Toast from "./Toast";
 
-import {toggleCreateFormVisibility, initializeBlogs, setToken} from "../reducers/blogReducer";
+import { toggleCreateFormVisibility, initializeBlogs, setToken } from "../reducers/blogReducer";
+import { logoutUser } from "../reducers/userReducer";
 
-const BlogPage = ({ user, setUser }) => {
+const BlogPage = () => {
     const {blogs, isCreateVisible} = useSelector(state => state.blogPage)
+    const user = useSelector(state => state.user)
+    
     const dispatch = useDispatch()
 
     setToken(user.token);
@@ -24,20 +27,12 @@ const BlogPage = ({ user, setUser }) => {
 
     const logout = () => {
         window.localStorage.removeItem("loggedInBlogListUser");
-        setUser(null);
+        dispatch(logoutUser())
     };
 
     useEffect(() => {
         dispatch(initializeBlogs())
     }, []);
-
-    const blogFormProps = {
-        user,
-    };
-
-    const blogProps = {
-        user,
-    };
 
     return (
         <div>
@@ -48,7 +43,7 @@ const BlogPage = ({ user, setUser }) => {
 
             <Toast />
 
-            {isCreateVisible && <BlogForm {...blogFormProps} />}
+            {isCreateVisible && <BlogForm />}
 
             {/* Button to toggle Form */}
             <button onClick={toggleVisibilityCreate}>
@@ -56,9 +51,12 @@ const BlogPage = ({ user, setUser }) => {
             </button>
 
             <h2> Blogs </h2>
-            {blogs.map((blog) => (
-                <Blog key={blog.id} blog={blog} {...blogProps} />
-            ))}
+            {blogs
+                .toSorted((blog1, blog2) => {
+                    return blog2.likes - blog1.likes;
+                })
+                .map((blog) => ( <Blog key={blog.id} blog={blog} /> )
+            )}
         </div>
     );
 };

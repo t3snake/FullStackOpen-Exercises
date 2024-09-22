@@ -1,14 +1,20 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
+
 import Toast from "./Toast";
+
 import loginService from "../services/login";
+
+import { loginUser, logoutUser } from "../reducers/userReducer";
 import { pushNotification } from "../reducers/notificationReducer";
 
-const LoginPage = ({
-    setUser,
-}) => {
+
+const LoginPage = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+
+    const dispatch = useDispatch()
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -19,7 +25,7 @@ const LoginPage = ({
                 "loggedInBlogListUser",
                 JSON.stringify(user),
             );
-            setUser(user);
+            dispatch(loginUser(user))
             setUsername("");
             setPassword("");
         } catch (error) {
@@ -61,10 +67,6 @@ const LoginPage = ({
             </form>
         </div>
     );
-};
-
-LoginPage.propTypes = {
-    setUser: PropTypes.func.isRequired,
 };
 
 export default LoginPage;

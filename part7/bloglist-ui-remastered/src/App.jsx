@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import BlogPage from "./components/BlogPage";
 import LoginPage from "./components/LoginPage";
 
-const App = () => {
-    const [user, setUser] = useState(null);
+import { loginUser } from "./reducers/userReducer";
+import { useDispatch, useSelector } from "react-redux";
 
-    const state = {
-        user,
-        setUser,
-    };
+const App = () => {
+    const dispatch = useDispatch()
+
+    const user = useSelector(state => state.user)
 
     useEffect(() => {
         const loggedUserJSON = window.localStorage.getItem(
@@ -16,15 +16,15 @@ const App = () => {
         );
         if (loggedUserJSON) {
             const user = JSON.parse(loggedUserJSON);
-            setUser(user);
+            dispatch(loginUser(user))
         }
     }, []);
 
     if (user === null) {
-        return <LoginPage {...state} />;
+        return <LoginPage />;
     }
 
-    return <BlogPage {...state} />;
+    return <BlogPage />;
 };
 
 export default App;

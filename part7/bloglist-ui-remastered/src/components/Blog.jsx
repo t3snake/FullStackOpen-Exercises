@@ -1,13 +1,12 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { initializeBlogs, deleteBlog, likeBlog } from "../reducers/blogReducer";
+import { deleteBlog, likeBlog } from "../reducers/blogReducer";
 import { pushNotification } from "../reducers/notificationReducer";
 
 
 const Blog = ({
     blog,
-    user,
 }) => {
     const dispatch = useDispatch()
 
@@ -17,6 +16,8 @@ const Blog = ({
         setDetailsVisible(!isDetailVisible);
     };
 
+    const user = useSelector(state => state.user)
+    
     const isBlogByUser = blog.user.username === user.username;
 
     const blogStyle = {
@@ -35,7 +36,7 @@ const Blog = ({
         return isDetailVisible ? "Hide" : "Show more";
     };
 
-    const deleteUser = async () => {
+    const deleteBlogByUser = async () => {
         try {
             if (window.confirm(`Delete Blog ${blog.title}?`)) {
                 dispatch(deleteBlog(blog.id))
@@ -48,8 +49,6 @@ const Blog = ({
     };
 
     const addLike = async () => {
-        // const modifiedBlog = await blogService.addLikeOnBlog(blog);
-        // const id = blog.id;
         dispatch(likeBlog(blog))
 
         dispatch(pushNotification(`Liked ${blog.title}`, "success", 5))
@@ -65,7 +64,7 @@ const Blog = ({
                     {blog.likes}
                     <button onClick={addLike}>Like</button>
                 </div>
-                {isBlogByUser && <button onClick={deleteUser}>Delete</button>}
+                {isBlogByUser && <button onClick={deleteBlogByUser}>Delete</button>}
             </div>
             <div>by {blog.author}</div>
         </div>
