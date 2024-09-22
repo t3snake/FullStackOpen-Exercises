@@ -13,7 +13,7 @@ const blogPageSlice = createSlice({
         toggleCreateVisibility(state, action){
             state.isCreateVisible = !state.isCreateVisible
         },
-        addBlog(state, action) {
+        add(state, action) {
             state.blogs.push({
                 id: action.payload.id,
                 title: action.payload.title,
@@ -23,8 +23,22 @@ const blogPageSlice = createSlice({
                 user: action.payload.user
             })
         },
-        deleteBlog(state, action) {
+        remove(state, action) {
             state.blogs = state.blogs.filter(blog => blog.id !== action.payload)
+        },
+        like(state, action) {
+            state.blogs = state.blogs.map(blog => 
+                blog.id === action.payload 
+                ? {
+                    id: blog.id,
+                    title: blog.title,
+                    url: blog.url,
+                    author: blog.author,
+                    likes: blog.likes + 1,
+                    user: blog.user
+                }
+                : blog
+            )
         },
         setBlogs(state, action) {
             state.blogs = action.payload
@@ -32,7 +46,12 @@ const blogPageSlice = createSlice({
     }
 })
 
-const { toggleCreateVisibility, addBlog, deleteBlog, setBlogs } = blogPageSlice.actions
+const { toggleCreateVisibility, add, remove, like, setBlogs } = blogPageSlice.actions
+
+let token = ''
+export const setToken = (tokenString) => {
+    blogService.setToken(tokenString)
+}
 
 export const initializeBlogs = () => {
     return async dispatch => {
@@ -47,7 +66,23 @@ export const createBlog = (title, url, author, user) => {
         console.log(newBlog)
         newBlog.user = user
         // await getAllBlogs();
-        dispatch(addBlog(newBlog))
+        dispatch(add(newBlog))
+    }
+}
+
+export const deleteBlog = (id) => {
+    return async dispatch => {
+        const response = await blogService.deleteBlog(id);
+        if (response.status === 204) {
+            dispatch(remove(id))
+        }
+    }
+}
+
+export const likeBlog = (blog) => {
+    return async dispatch => {
+        await blogService.addLikeOnBlog(blog)
+        dispatch(like(blog.id))
     }
 }
 

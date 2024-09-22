@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { initializeBlogs } from "../reducers/blogReducer";
+import { initializeBlogs, deleteBlog, likeBlog } from "../reducers/blogReducer";
 import { pushNotification } from "../reducers/notificationReducer";
 
 
 const Blog = ({
     blog,
     user,
-    blogService,
 }) => {
     const dispatch = useDispatch()
 
@@ -39,12 +38,9 @@ const Blog = ({
     const deleteUser = async () => {
         try {
             if (window.confirm(`Delete Blog ${blog.title}?`)) {
-                const response = await blogService.deleteBlog(blog.id);
-                if (response.status === 204) {
-                    dispatch(initializeBlogs())
-
-                    dispatch(pushNotification(`Blog: ${blog.title} deleted successfully`, "success", 5))
-                }
+                dispatch(deleteBlog(blog.id))
+                dispatch(pushNotification(`Blog: ${blog.title} deleted successfully`, "success", 5))
+                
             }
         } catch (error) {
             dispatch(pushNotification(`Blog delete failed due to ${error.message}`, "error", 5))
@@ -52,11 +48,11 @@ const Blog = ({
     };
 
     const addLike = async () => {
-        const modifiedBlog = await blogService.addLikeOnBlog(blog);
-        const id = blog.id;
-        dispatch(initializeBlogs())
+        // const modifiedBlog = await blogService.addLikeOnBlog(blog);
+        // const id = blog.id;
+        dispatch(likeBlog(blog))
 
-        dispatch(pushNotification(`Liked ${blog.title}`, "error", 5))
+        dispatch(pushNotification(`Liked ${blog.title}`, "success", 5))
     };
 
     return (

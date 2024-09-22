@@ -5,8 +5,6 @@ import { useDispatch } from "react-redux";
 
 const BlogForm = ({
     user,
-    blogService,
-    getAllBlogs,
 }) => {
     // State for create form inputs
     const [title, setTitle] = useState("");
