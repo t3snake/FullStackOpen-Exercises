@@ -19,7 +19,7 @@ const BlogView = () => {
     if ( !blog ){
         return null
     }
-    
+
     const isBlogByUser = blog.user.username === user.username;
 
     const deleteBlogByUser = async () => {
@@ -45,7 +45,7 @@ const BlogView = () => {
             <h2 data-testid="blog-title">
                 {blog.title} by {blog.author}
             </h2>
-            <a rel='noopener noreferrer' href={blog.url}>{blog.url}</a>
+            <div>{blog.url}</div>
             <div data-testid="likes">
                 {blog.likes}
                 <button onClick={addLike}>Like</button>

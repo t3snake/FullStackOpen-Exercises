@@ -44,10 +44,20 @@ const App = () => {
 
     return (
         <Router>
-             <p>
-                {user.name} logged in
-                <button onClick={logout}>Logout</button>
-            </p>
+            <div>
+                <span>
+                    <Link to={'/'}>blogs </Link>
+                    {' '}
+                </span>
+                <span>
+                    <Link to={'/users'}>users {' '}</Link>
+                    {' '}
+                </span>
+                <span>
+                    {user.name} logged in
+                    <button onClick={logout}>Logout</button>
+                </span>
+            </div>
 
             <Toast />
             <Routes>
