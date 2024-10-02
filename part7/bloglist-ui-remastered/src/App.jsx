@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom'
 
 import BlogPage from "./components/BlogPage";
+import BlogView from "./components/BlogView";
 import UsersView from "./components/UsersView";
 import UserView from "./components/UserView";
 import LoginPage from "./components/LoginPage";
 import Toast from "./components/Toast";
 
+import { initializeBlogs } from "./reducers/blogReducer";
 import { loginUser, logoutUser } from "./reducers/userReducer";
 
 
@@ -25,6 +27,11 @@ const App = () => {
             dispatch(loginUser(user))
         }
     }, []);
+
+    useEffect(() => {
+        dispatch(initializeBlogs())
+    }, []);
+
 
     const logout = () => {
         window.localStorage.removeItem("loggedInBlogListUser");
@@ -44,9 +51,10 @@ const App = () => {
 
             <Toast />
             <Routes>
-                <Route path="/" element={<BlogPage />} />
-                <Route path="/users" element={<UsersView />} />
-                <Route path="/users/:id" element={<UserView />} />
+                <Route path="/" element={ <BlogPage /> } />
+                <Route path="/blogs/:id" element={ <BlogView /> } />
+                <Route path="/users" element={ <UsersView /> } />
+                <Route path="/users/:id" element={ <UserView /> } />
             </Routes>
         </Router>
     )

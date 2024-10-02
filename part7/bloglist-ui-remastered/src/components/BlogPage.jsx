@@ -1,7 +1,6 @@
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
-import Blog from "./Blog";
 import BlogForm from "./BlogForm";
 
 import { toggleCreateFormVisibility, initializeBlogs, setToken } from "../reducers/blogReducer";
@@ -23,10 +22,6 @@ const BlogPage = () => {
         return "Add Blog";
     };
 
-    useEffect(() => {
-        dispatch(initializeBlogs())
-    }, []);
-
     return (
         <div>
             {isCreateVisible && <BlogForm />}
@@ -41,7 +36,12 @@ const BlogPage = () => {
                 .toSorted((blog1, blog2) => {
                     return blog2.likes - blog1.likes;
                 })
-                .map((blog) => ( <Blog key={blog.id} blog={blog} /> )
+                .map((blog) => ( 
+                    <div key={blog.id}>
+                    <Link to={`/blogs/${blog.id}`}>
+                        {blog.title} by {blog.author}
+                    </Link> 
+                    </div>)
             )}
         </div>
     );
