@@ -3,10 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Blog from "./Blog";
 import BlogForm from "./BlogForm";
-import Toast from "./Toast";
 
 import { toggleCreateFormVisibility, initializeBlogs, setToken } from "../reducers/blogReducer";
-import { logoutUser } from "../reducers/userReducer";
 
 const BlogPage = () => {
     const {blogs, isCreateVisible} = useSelector(state => state.blogPage)
@@ -25,24 +23,12 @@ const BlogPage = () => {
         return "Add Blog";
     };
 
-    const logout = () => {
-        window.localStorage.removeItem("loggedInBlogListUser");
-        dispatch(logoutUser())
-    };
-
     useEffect(() => {
         dispatch(initializeBlogs())
     }, []);
 
     return (
         <div>
-            <p>
-                {user.name} logged in
-                <button onClick={logout}>Logout</button>
-            </p>
-
-            <Toast />
-
             {isCreateVisible && <BlogForm />}
 
             {/* Button to toggle Form */}
