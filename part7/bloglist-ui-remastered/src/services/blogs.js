@@ -31,6 +31,17 @@ const addBlog = async (title, url, author) => {
     return response.data;
 };
 
+const addCommentOnBlog = async (id, comment) => {
+    const response = await axios.post(
+        `${baseUrl}/${id}/comments`,
+        {
+            comment,
+        }
+    );
+    return response.data;
+
+}
+
 const addLikeOnBlog = async (blog) => {
     const response = await axios.put(`${baseUrl}/${blog.id}`, {
         title: blog.title,
@@ -49,4 +60,4 @@ const deleteBlog = async (id) => {
     });
 };
 
-export default { setToken, getBlogs, addBlog, addLikeOnBlog, deleteBlog };
+export default { setToken, getBlogs, addBlog, addLikeOnBlog, deleteBlog, addCommentOnBlog };

@@ -42,13 +42,33 @@ const blogPageSlice = createSlice({
                 : blog
             )
         },
+        comment(state, action) {
+            state.blogs = state.blogs.map(blog => {
+                const allComments = [...blog.comments]
+                allComments.push(action.payload.comment)
+
+                return (
+                    blog.id === action.payload.id
+                    ? {
+                        id: blog.id,
+                        title: blog.title,
+                        url: blog.url,
+                        author: blog.author,
+                        likes: blog.likes,
+                        user: blog.user,
+                        comments: allComments,
+                    }
+                    : blog
+                )
+            })
+        },
         setBlogs(state, action) {
             state.blogs = action.payload
         }
     }
 })
 
-const { toggleCreateVisibility, add, remove, like, setBlogs } = blogPageSlice.actions
+const { toggleCreateVisibility, add, remove, like, setBlogs, comment } = blogPageSlice.actions
 
 let token = ''
 export const setToken = (tokenString) => {
@@ -84,6 +104,13 @@ export const likeBlog = (blog) => {
     return async dispatch => {
         await blogService.addLikeOnBlog(blog)
         dispatch(like(blog.id))
+    }
+}
+
+export const commentOnBlog = (id, commentString) => {
+    return async dispatch => {
+        await blogService.addCommentOnBlog(id, commentString)
+        dispatch(comment({id,comment: commentString}))
     }
 }
 
