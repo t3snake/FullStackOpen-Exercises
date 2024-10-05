@@ -52,6 +52,17 @@ const BlogView = () => {
             </div>
             <div>added by {blog.user.name}</div>
             {isBlogByUser && <button onClick={deleteBlogByUser}>Delete</button>}
+
+            <h3>Comments</h3>
+            <ul>
+                {blog.comments.map( (comment, index) => {
+                    return (
+                        <li key={index}>
+                            {comment}
+                        </li>
+                    )
+                })}
+            </ul>
         </div>
     );
 };

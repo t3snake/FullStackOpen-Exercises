@@ -20,7 +20,8 @@ const blogPageSlice = createSlice({
                 url: action.payload.url,
                 author: action.payload.author,
                 likes: 0,
-                user: action.payload.user
+                user: action.payload.user,
+                comments: action.payload.comments,
             })
         },
         remove(state, action) {
@@ -35,7 +36,8 @@ const blogPageSlice = createSlice({
                     url: blog.url,
                     author: blog.author,
                     likes: blog.likes + 1,
-                    user: blog.user
+                    user: blog.user,
+                    comments: blog.comments,
                 }
                 : blog
             )

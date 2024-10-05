@@ -39,6 +39,34 @@ blogRouter.post('/', middleware.userExtractor, async (request, response) => {
     }
 })
 
+blogRouter.post('/:id/comments', async (request, response) => {
+    const id = request.params.id
+
+    // mongo _id format check
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+        response.status(404).end()
+        return
+    }
+
+    try{
+        const comment = request.body.comment
+
+        const blog = await Blog.findById(id)
+
+        if ( !blog.comments ) {
+            blog.comments = []
+        }
+
+        blog.comments.push(comment)
+
+        const result = await blog.save()
+
+        response.status(201).json(result)
+    } catch(exception) {
+        response.status(400).send({error: exception.message})
+    }
+})
+
 blogRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
     const id = request.params.id
 
@@ -46,7 +74,7 @@ blogRouter.delete('/:id', middleware.userExtractor, async (request, response) =>
 
     try{
         await Blog.findByIdAndDelete(id)
-        user.blogs = user.blogs.filter(user => user._id !== id)
+        user.blogs = user.blogs.filter(blogId => blogId.toString() !== id)
         await user.save()
         response.status(204).end()
     } catch (error) {
