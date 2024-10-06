@@ -1,6 +1,16 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
+import Paper from '@mui/material/Paper'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Table from '@mui/material/Table'
+import TableHead from '@mui/material/TableHead'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableContainer from '@mui/material/TableContainer'
+import TableRow from '@mui/material/TableRow'
+
 import { getUsers } from "../services/users"
 
 
@@ -17,34 +27,36 @@ const UsersView = () => {
     }, [])
     
     return (
-        <>
-        <h2>Users</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th> </th>
-                    <th>blogs created</th>
-                </tr>
-            </thead>
+        <Box sx={{my:2}}>
+            <Typography variant="h3">Users</Typography>
+            <TableContainer component={Paper} sx={{my: 2}}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell> </TableCell>
+                            <TableCell variant="h4">blogs created</TableCell>
+                        </TableRow>
+                    </TableHead>
 
-            <tbody>
-                {users.map(user => {
-                    return(
-                        <tr key={user.id}>
-                            <td>
-                                <Link to={`/users/${user.id}`}>
-                                    {user.name}
-                                </Link>
-                            </td>
-                            <td>
-                                {user.blogs.length}
-                            </td>
-                        </tr>
-                    )
-                })}
-            </tbody>
-        </table>
-        </>
+                    <TableBody>
+                        {users.map(user => {
+                            return(
+                                <TableRow key={user.id}>
+                                    <TableCell>
+                                        <Link to={`/users/${user.id}`}>
+                                            {user.name}
+                                        </Link>
+                                    </TableCell>
+                                    <TableCell>
+                                        {user.blogs.length}
+                                    </TableCell>
+                                </TableRow>
+                            )
+                        })}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Box>
     )
 }
 

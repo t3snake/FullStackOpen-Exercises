@@ -1,7 +1,13 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+
 import { pushNotification } from "../reducers/notificationReducer";
 import { createBlog } from "../reducers/blogReducer";
-import { useDispatch, useSelector } from "react-redux";
 
 const BlogForm = () => {
     // State for create form inputs
@@ -32,45 +38,42 @@ const BlogForm = () => {
     };
 
     return (
-        <div>
-            <h2> Add new blog </h2>
+        <Paper sx={{my: 2, p: 2}}>
+            <Typography variant="h4"> Add new blog </Typography>
             <form onSubmit={createNewBlog}>
                 <div>
-                    Title:
-                    <input
-                        type="text"
+                    <TextField
+                        id="standard-controlled"
+                        variant="standard"
                         value={title}
-                        name="Title"
+                        label="Title"
                         onChange={({ target }) => setTitle(target.value)}
-                        data-testid="title-field"
                     />
                 </div>
 
                 <div>
-                    Author:
-                    <input
-                        type="text"
+                    <TextField
+                        id="standard-controlled"
+                        variant="standard"
                         value={author}
-                        name="Author"
+                        label="Author"
                         onChange={({ target }) => setAuthor(target.value)}
-                        data-testid="author-field"
                     />
                 </div>
 
                 <div>
-                    URL:
-                    <input
-                        type="text"
+                    <TextField
+                        id="standard-controlled"
+                        variant="standard"
                         value={url}
-                        name="URL"
+                        label="URL"
                         onChange={({ target }) => setUrl(target.value)}
-                        data-testid="url-field"
                     />
                 </div>
 
-                <button type="submit"> Add </button>
+                <Button variant="contained" color="secondary" type="submit" sx={{my: 2}}> Add </Button>
             </form>
-        </div>
+        </Paper>
     );
 };
 

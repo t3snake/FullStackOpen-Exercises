@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react"
+import { Link, useParams } from "react-router-dom"
+
+import Paper from '@mui/material/Paper'
+import Typography from "@mui/material/Typography"
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
 
 import { getUsers } from "../services/users"
-import { Link, useParams } from "react-router-dom"
 
 const UserView = () => {
     const id = useParams().id
@@ -22,20 +27,20 @@ const UserView = () => {
     }
 
     return (
-        <>
-            <h2>{user.name}</h2>
+        <Paper sx={{my: 2, p: 2}}>
+            <Typography variant="h3">{user.name}</Typography>
 
-            <h3>added blogs</h3>
-            <ul>
+            <Typography variant="h4">added blogs</Typography>
+            <List>
                 {user.blogs.map(blog => {
                     return (
-                        <li key={blog.id}>
+                        <ListItem key={blog.id}>
                             {blog.title}
-                        </li>
+                        </ListItem>
                     )
                 })}
-            </ul>
-        </>
+            </List>
+        </Paper>
     )
 }
 

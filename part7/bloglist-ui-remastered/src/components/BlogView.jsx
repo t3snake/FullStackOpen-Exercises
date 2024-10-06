@@ -1,6 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
+import Typography from "@mui/material/Typography";
+import Box from '@mui/material/Box'
+import TextField from '@mui/material/TextField'
+import Button from '@mui/material/Button'
+import Paper from "@mui/material/Paper";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+
 import { deleteBlog, likeBlog, commentOnBlog } from "../reducers/blogReducer";
 import { pushNotification } from "../reducers/notificationReducer";
 import { useState } from "react";
@@ -53,38 +61,44 @@ const [comment, setComment] = useState('')
     }
 
     return (
-        <div>
-            <h2 data-testid="blog-title">
+        <>
+        <Paper sx={{p:2, my:2}}>
+            <Typography variant="h3">
                 {blog.title} by {blog.author}
-            </h2>
-            <div>{blog.url}</div>
-            <div data-testid="likes">
-                {blog.likes}
-                <button onClick={addLike}>Like</button>
-            </div>
-            <div>added by {blog.user.name}</div>
-            {isBlogByUser && <button onClick={deleteBlogByUser}>Delete</button>}
+            </Typography>
+            <Typography>{blog.url}</Typography>
+            <Typography>added by {blog.user.name}</Typography>
+            <Box sx={{my: 2}}>
+                <Typography>{blog.likes} Likes</Typography>
+                <Button variant="contained" color="secondary" onClick={addLike}>Like</Button>
+            </Box>
+            
+            {isBlogByUser && <Button variant="contained" color="secondary" onClick={deleteBlogByUser}>Delete</Button>}
+        </Paper>
 
-            <h3>Comments</h3>
+        <Paper sx={{p:2, my:2}}>
+            <Typography variant="h4" sx={{my: 2}}>Comments</Typography>
             <form onSubmit={addComment}>
-                <input
+                <TextField
+                    id="standard-controlled"
                     type="text"
                     value={comment}
-                    name="Comment"
+                    label="Comment"
                     onChange={({ target }) => setComment(target.value)}
                 />
-                <button type="submit"> Add comment </button>
+                <Button type="submit" color="secondary" variant="contained" sx={{mx: 2}}> Add comment </Button>
             </form>
-            <ul>
+            <List sx={{bgcolor: 'background.paper'}}>
                 {blog.comments.map( (comment, index) => {
                     return (
-                        <li key={index}>
+                        <ListItem key={index}>
                             {comment}
-                        </li>
+                        </ListItem>
                     )
                 })}
-            </ul>
-        </div>
+            </List>
+        </Paper>
+        </>
     );
 };
 

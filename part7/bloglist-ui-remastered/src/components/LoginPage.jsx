@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import PropTypes from "prop-types";
+
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Box from '@mui/material/Box'
 
 import Toast from "./Toast";
 
@@ -38,34 +42,33 @@ const LoginPage = () => {
     };
 
     return (
-        <div>
+        <Box>
             <Toast />
-            <h2>Log in to application</h2>
+            <Typography variant="h3" sx={{my: 2}}>Log in to application</Typography>
             <form onSubmit={handleLogin}>
                 <div>
-                    Username:
-                    <input
-                        type="text"
+                    <TextField
+                        id="standard-controlled"
+                        variant="standard"
+                        label="Username"
                         value={username}
-                        name="Username"
-                        data-testid="user-field"
                         onChange={({ target }) => setUsername(target.value)}
                     />
                 </div>
 
                 <div>
-                    Password:
-                    <input
-                        type="password"
+                    <TextField
+                        id="standard-controlled"
+                        variant="standard"
+                        label="Password"
                         value={password}
-                        name="Password"
-                        data-testid="password-field"
+                        type="password"
                         onChange={({ target }) => setPassword(target.value)}
                     />
                 </div>
-                <button type="submit"> Login </button>
+                <Button variant="contained" color="primary" type="submit" sx={{my: 2}}> Login </Button>
             </form>
-        </div>
+        </Box>
     );
 };
 
